@@ -80,9 +80,9 @@ class DefinitionOfDoneController extends BaseController
     public function rows($task_id)
     {
         $dods = $this->definitionOfDoneModel->getAllById($task_id);
-
+        $html = "";
         foreach ($dods as $dod) {
-            $html = '<tr class="dod" dodId="' . $dod['id'] . '">';
+            $html .= '<tr class="dod" dodId="' . $dod['id'] . '">';
             $html .= '<td class="dodOptions">';
             $html .= '<i class="fa fa-fw fa-square-o button dodSelect"></i>';
             $html .= '<i class="fa fa-fw fa-trash button dodTrash"></i>';
