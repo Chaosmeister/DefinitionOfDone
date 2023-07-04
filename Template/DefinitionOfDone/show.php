@@ -1,15 +1,15 @@
 <details class="accordion-section" open>
     <summary class="accordion-title"><?= t('Definition Of Done') ?></summary>
     <div class="accordion-content">
-        <table class="DoD-table table-striped table-scrolling" data-save-position-url="<?= $this->url->href('DefinitionOfDoneController', 'movePosition', array('task_id' => $task['id'])) ?>">
+        <table class="dod-table table-striped table-scrolling" data-save-position-url="<?= $this->url->href('DefinitionOfDoneController', 'move', array('task_id' => $task['id'], "plugin" => "DefinitionOfDone")) ?>">
             <thead>
                 <tr>
-                    <th class="column-10"><?= t('Options') ?></th>
-                    <th class="column-1"><?= t('Status') ?></th>
+                    <th class=""><?= t('Options') ?></th>
+                    <th class=""><?= t('Status') ?></th>
                     <th><?= t('Title') ?></th>
-                    <th class="column-10"><?= t('Assignee') ?></th>
-                    <th class="column-30"><?= t('Description') ?></th>
-                    <th class="column-30"><?= t('Time tracking') ?></th>
+                    <th class=""><?= t('Assignee') ?></th>
+                    <th class=""><?= t('Description') ?></th>
+                    <th class=""><?= t('Time tracking') ?></th>
                 </tr>
             </thead>
             <tbody>

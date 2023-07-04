@@ -47,8 +47,7 @@ KB.on('dom.ready', function () {
 
         if (dodJson["ids"]) {
             const link = '?controller=DefinitionOfDoneController&action=trash&plugin=DefinitionOfDone';
-            if (KB.http.postJson(link, dodJson))
-            {
+            if (KB.http.postJson(link, dodJson)) {
             }
         }
     });
@@ -101,6 +100,53 @@ KB.on('dom.ready', function () {
 
         this.closest(".dod").classList.toggle("dod-selected");
     });
+
+    function savePosition(dodid, position) {
+        var url = $(".dod-table").data("save-position-url");
+
+        $.ajax({
+            cache: false,
+            url: url,
+            contentType: "application/json",
+            type: "POST",
+            processData: false,
+            data: JSON.stringify({
+                "dod_id": dodid,
+                "position": position
+            })
+        });
+    }
+
+    function bootstrap() {
+        $(".draggable-row-handle").mouseenter(function () {
+            $(this).parent().parent().addClass("draggable-item-hover");
+        }).mouseleave(function () {
+            $(this).parent().parent().removeClass("draggable-item-hover");
+        });
+
+        $(".dod-table tbody").sortable({
+            forcePlaceholderSize: true,
+            handle: "td:first i",
+            helper: function (e, ui) {
+                ui.children().each(function () {
+                    $(this).width($(this).width());
+                });
+
+                return ui;
+            },
+            stop: function (event, ui) {
+                var dod = ui.item;
+                dod.removeClass("draggable-item-selected");
+                savePosition(dod.attr("dodid"), dod.index() + 1);
+            },
+            start: function (event, ui) {
+                ui.item.addClass("draggable-item-selected");
+            }
+        }).disableSelection();
+    }
+
+    KB.on('dom.ready', bootstrap);
+    KB.on('dod.reloaded', bootstrap);
 });
 
 function resizeEvent(event) {

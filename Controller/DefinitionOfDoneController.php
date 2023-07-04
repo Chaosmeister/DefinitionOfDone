@@ -84,6 +84,7 @@ class DefinitionOfDoneController extends BaseController
         foreach ($dods as $dod) {
             $html .= '<tr class="dod" dodId="' . $dod['id'] . '">';
             $html .= '<td class="dodOptions">';
+            $html .= '<i class="fa fa-arrows-alt draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></i>';
             $html .= '<i class="fa fa-fw fa-square-o button dodSelect"></i>';
             $html .= '<i class="fa fa-fw fa-trash button dodTrash"></i>';
             $html .= '<i class="fa fa-fw fa-edit button dodEdit"></i>';
@@ -138,5 +139,13 @@ class DefinitionOfDoneController extends BaseController
         $html .= '</td>';
 
         $this->response->html($html);
+    }
+
+    public function move()
+    {
+        $values = $this->request->getJson();
+        $task_id = $this->request->getIntegerParam('task_id');
+
+        $this->definitionOfDoneModel->move($task_id, $values['dod_id'], $values['position']);
     }
 }

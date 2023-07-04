@@ -21,7 +21,7 @@ class DefinitionOfDoneModel extends Base
 
     public function getAllById($taskId)
     {
-        return $this->db->table($this->getTable())->eq('task_id', $taskId)->findAll();
+        return $this->db->table($this->getTable())->eq('task_id', $taskId)->orderBy("position")->findAll();
     }
 
     public function saveMultiple($entries)
@@ -77,5 +77,29 @@ class DefinitionOfDoneModel extends Base
         foreach ($entries as $entry) {
             $this->db->table($this->getTable())->eq('id', $entry)->remove();
         }
+    }
+
+    public function move($task_id, $dod_id, $position)
+    {
+        if ($position < 1 || $position > $this->db->table($this->getTable())->eq('task_id', $task_id)->count()) {
+            return false;
+        }
+
+        $dod_ids = $this->db->table($this->getTable())->eq('task_id', $task_id)->neq('id', $dod_id)->asc('position')->findAllByColumn('id');
+        $offset = 1;
+        $results = array();
+
+        foreach ($dod_ids as $current_subtask_id) {
+            if ($offset == $position) {
+                $offset++;
+            }
+
+            $results[] = $this->db->table($this->getTable())->eq('id', $current_subtask_id)->update(array('position' => $offset));
+            $offset++;
+        }
+
+        $results[] = $this->db->table($this->getTable())->eq('id', $dod_id)->update(array('position' => $position));
+
+        return !in_array(false, $results, true);
     }
 }
