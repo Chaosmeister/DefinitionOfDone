@@ -4,12 +4,12 @@
         <table class="dod-table table-striped table-scrolling" data-save-position-url="<?= $this->url->href('DefinitionOfDoneController', 'move', array('task_id' => $task['id'], "plugin" => "DefinitionOfDone")) ?>">
             <thead>
                 <tr>
-                    <th class=""><?= t('Options') ?></th>
-                    <th class=""><?= t('Status') ?></th>
+                    <th><?= t('Options') ?></th>
+                    <th><?= t('Status') ?></th>
                     <th><?= t('Title') ?></th>
-                    <th class=""><?= t('Assignee') ?></th>
-                    <th class=""><?= t('Description') ?></th>
-                    <th class=""><?= t('Time tracking') ?></th>
+                    <th><?= t('Assignee') ?></th>
+                    <th><?= t('Description') ?></th>
+                    <th><?= t('Time tracking') ?></th>
                 </tr>
             </thead>
             <tbody>
