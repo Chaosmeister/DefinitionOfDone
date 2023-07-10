@@ -10,7 +10,8 @@ textarea.dodInput {
 
 .dod-draggable-row-handle {
     cursor: move;
-    color: #dedede
+    color: #dedede;
+    padding: 4px
 }
 
 .dod-draggable-row-handle:hover {
