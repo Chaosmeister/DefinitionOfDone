@@ -14,21 +14,6 @@
             </thead>
             <tbody>
                 <?= $this->app->definitionOfDoneController->rows($task['id']); ?>
-                <tr>
-                    <td class="DoDOptions">
-                        <?= $this->app->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'newrow', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodNew'); ?>
-                    </td>
-                    <td class="DoDStatus">
-                    </td>
-                    <td class="DoDTitle">
-                    </td>
-                    <td class="DoDAssignee">
-                    </td>
-                    <td class="DoDdescription">
-                    </td>
-                    <td class="DoDTimer">
-                    </td>
-                </tr>
             </tbody>
         </table>
     </div>

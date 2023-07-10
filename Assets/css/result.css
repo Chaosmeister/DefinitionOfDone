@@ -7,3 +7,12 @@ textarea.dodInput {
 .button {
     cursor: pointer;
 }
+
+.dod-draggable-row-handle {
+    cursor: move;
+    color: #dedede
+}
+
+.dod-draggable-row-handle:hover {
+    color: var(--color-primary)
+}

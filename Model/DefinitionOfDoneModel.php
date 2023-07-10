@@ -6,22 +6,19 @@ use Kanboard\Core\Base;
 
 class DefinitionOfDoneModel extends Base
 {
-    protected function getTable()
+    protected function table()
     {
-        return "definition_of_done";
+        return $this->db->table("definition_of_done");
     }
 
     public function getById($Id)
     {
-        $result = $this->db->table($this->getTable())->eq('id', $Id)->findOne();
-        if (isset($result['text'])) {
-            return $result;
-        }
+        return $this->table()->eq('id', $Id)->findOne();
     }
 
     public function getAllById($taskId)
     {
-        return $this->db->table($this->getTable())->eq('task_id', $taskId)->orderBy("position")->findAll();
+        return $this->table()->eq('task_id', $taskId)->orderBy("position")->findAll();
     }
 
     public function saveMultiple($entries)
@@ -37,31 +34,15 @@ class DefinitionOfDoneModel extends Base
 
     public function save($entry)
     {
-        if ($this->GetById($entry['id']) == "") {
-            $this->db->table($this->getTable())->insert(
-                array(
-                    'id' => $entry['id'],
-                    'title' => $entry['title'],
-                    'status' => $entry['status'],
-                    'task_id' => $entry['task_id'],
-                    'user_id' => $entry['user_id'],
-                    'text' => $entry['text'],
-                    'position' => $entry['position'],
-                )
-            );
-        } else {
-            $this->db->table($this->getTable())->eq('id', $entry['id'])->update(
-                array(
-                    'text' => $entry['text'],
-                    'title' => $entry['title'],
-                    'status' => $entry['status'],
-                    'task_id' => $entry['task_id'],
-                    'user_id' => $entry['user_id'],
-                    'text' => $entry['text'],
-                    'position' => $entry['position'],
-                )
-            );
+        if (isset($entry['id'])) {
+            $dbEntry = $this->table()->eq('id', $entry['id']);
+            if ($dbEntry->exists()) {
+                $dbEntry->update($entry);
+                return;
+            }
         }
+
+        $this->table()->insert($entry);
     }
 
     public function copy($sourceId, $destinationId)
@@ -72,33 +53,47 @@ class DefinitionOfDoneModel extends Base
         }
     }
 
-    public function delete($entries)
+    public function delete($dodIds)
     {
-        foreach ($entries as $entry) {
-            $this->db->table($this->getTable())->eq('id', $entry)->remove();
+        $this->db->startTransaction();
+
+        foreach ($dodIds["ids"] as $dodId) {
+            $Entry = $this->table()->eq('id', $dodId);
+
+            $values = $Entry->findOne();
+            $size = $this->table()->eq('task_id', $values["task_id"])->count();
+
+            $this->move($values["task_id"], $dodId, $size);
+
+            if (!$Entry->remove()) {
+                $this->db->cancelTransaction();
+                return;
+            }
         }
+
+        $this->db->closeTransaction();
     }
 
-    public function move($task_id, $dod_id, $position)
+    public function move($task_id, int $dod_id, $position)
     {
-        if ($position < 1 || $position > $this->db->table($this->getTable())->eq('task_id', $task_id)->count()) {
+        if ($position < 1 || $position > $this->table()->eq('task_id', $task_id)->count()) {
             return false;
         }
 
-        $dod_ids = $this->db->table($this->getTable())->eq('task_id', $task_id)->neq('id', $dod_id)->asc('position')->findAllByColumn('id');
+        $dod_ids = $this->table()->eq('task_id', $task_id)->neq('id', $dod_id)->asc('position')->findAllByColumn('id');
         $offset = 1;
         $results = array();
 
-        foreach ($dod_ids as $current_subtask_id) {
+        foreach ($dod_ids as $current_id) {
             if ($offset == $position) {
                 $offset++;
             }
 
-            $results[] = $this->db->table($this->getTable())->eq('id', $current_subtask_id)->update(array('position' => $offset));
+            $results[] = $this->table()->eq('id', $current_id)->update(array('position' => $offset));
             $offset++;
         }
 
-        $results[] = $this->db->table($this->getTable())->eq('id', $dod_id)->update(array('position' => $position));
+        $results[] = $this->table()->eq('id', $dod_id)->update(array('position' => $position));
 
         return !in_array(false, $results, true);
     }
