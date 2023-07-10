@@ -1,4 +1,20 @@
 
+function hideSingleNewRow() {
+    if ($(".newdodrow").is(":visible")) {
+        $(".newdodrow").hide();
+    }
+}
+
+function showSingleNewRow() {
+    if ($(".newdodrow").is(":hidden")) {
+        var rows = $(".dod-table").find(".newdod, .dod");
+
+        if (rows.length == 0) {
+            $(".newdodrow").show();
+        }
+    }
+}
+
 function serializedodtable() {
     var dod = [];
 
@@ -31,7 +47,8 @@ KB.on('dom.ready', function () {
         KB.http.get(url).success(function (data) {
             $(data).insertBefore(el.closest("tr"));
         });
-        e.preventDefault();
+
+        hideSingleNewRow();
     });
 
     $(document).on('input', '.dodInput', function (e) {
@@ -42,6 +59,8 @@ KB.on('dom.ready', function () {
     $(document).on('click', '.newdodTrash', function (e) {
         e.preventDefault();
         this.closest(".newdod").remove();
+
+        showSingleNewRow();
     });
 
     $(document).on('click', '.dodEdit', function (e) {
@@ -71,6 +90,8 @@ KB.on('dom.ready', function () {
             const link = '?controller=DefinitionOfDoneController&action=trash&plugin=DefinitionOfDone';
             KB.http.postJson(link, dodJson)
         }
+        
+        showSingleNewRow();
     });
 
     $(document).on('click', '.dodSave', function (e) {
@@ -141,6 +162,6 @@ function resizeEvent(event) {
 }
 
 function resize(element) {
-    element.style.height = "";
+    element.style.height = ""; // resets element.scrollHeight to the current necessary height
     element.style.height = element.scrollHeight + "px";
 }

@@ -46,13 +46,20 @@ class DefinitionOfDoneController extends BaseController
             $html .= $this->row($dod, $task_id);
         }
 
+        $hidden = true;
         if ($html == "") {
-            $html = $html = '<tr>';
-            $html .= '<td colspan=99>';
-            $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
-            $html .= '</td>';
-            $html .= '<tr>';
+            $hidden = false;
         }
+
+        $html .= '<tr class="newdodrow"';
+        if ($hidden) {
+            $html .= ' hidden';
+        }
+        $html .= '>';
+        $html .= '<td colspan=99>';
+        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
+        $html .= '</td>';
+        $html .= '<tr>';
 
         return $html;
     }
@@ -65,7 +72,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<i class="fa fa-fw fa-square-o button dodSelect"></i>';
         $html .= '<i class="fa fa-fw fa-trash button dodTrash"></i>';
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
-        $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodEdit');
+        $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit');
         $html .= '</td>';
 
         if ($dod['text'] == "=====") {
@@ -75,7 +82,13 @@ class DefinitionOfDoneController extends BaseController
         } else {
             $html .= '<td class="dodStatus">';
             if ($dod['status'] == 0) {
-                $html .= '<i class="fa fa-play button dodStart"></i>';
+                $html .= $this->helper->url->icon('play', '', 'DefinitionOfDoneController', 'start', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodStart');
+            }
+            if ($dod['status'] == 1) {
+                $html .= $this->helper->url->icon('gears', '', 'DefinitionOfDoneController', 'stop', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodstop');
+            }
+            if ($dod['status'] == 1) {
+                $html .= $this->helper->url->icon('stop', '', 'DefinitionOfDoneController', 'clear', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodstop');
             }
             $html .= '</td>';
             $html .= '<td class="dodTitle">';
@@ -102,9 +115,6 @@ class DefinitionOfDoneController extends BaseController
 
     private function newrow($dod)
     {
-        if (isset($dod["title"])) {
-        }
-
         $task_id = $this->request->getIntegerParam('task_id');
 
         $html = '<tr class="newdod">';
@@ -117,13 +127,22 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
         $html .= '<td class="dodTitle">';
-        $html .= '<input class="dodInput newdodTitle"></input>';
+        if (isset($dod["title"])) {
+            $html .= '<input class="dodInput newdodTitle" value="' . $dod["title"] . '">';
+        } else {
+            $html .= '<input class="dodInput newdodTitle">';
+        }
         $html .= '</td>';
         $html .= '<td class="dodAssignee">';
         $html .= '</td>';
         $html .= '</td>';
         $html .= '<td class="doddescription">';
-        $html .= '<textarea class="dodInput newdodDescription"></textarea>';
+        if (isset($dod["text"])) {
+            $html .= '<textarea class="dodInput newdodDescription" value="' . $dod["text"] . '">';
+        } else {
+            $html .= '<textarea class="dodInput newdodDescription">';
+        }
+        $html .= '</textarea>';
         $html .= '</td>';
         $html .= '<td class="dodTimer">';
         $html .= '</td>';
