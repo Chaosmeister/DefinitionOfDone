@@ -167,7 +167,7 @@ KB.on('dom.ready', function () {
             start: function (event, ui) {
                 ui.item.addClass("draggable-item-selected");
             }
-        }).disableSelection();
+        });
     }
 
     KB.on('dom.ready', dodbootstrap);
