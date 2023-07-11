@@ -6,7 +6,7 @@
             <thead>
                 <tr>
                     <th><?= t('Options') ?></th>
-                    <th><?= t('Status') ?></th>
+                    <th><?= t('Done') ?></th>
                     <th><?= t('Title') ?></th>
                     <th><?= t('Assignee') ?></th>
                     <th><?= t('Description') ?></th>

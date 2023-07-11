@@ -18,12 +18,19 @@ function showSingleNewRow() {
 function serializedodtable() {
     var dod = [];
 
-    var rows = $(".dod-table").find(".newdod, .dod");
+    var rows = $(".dod-table").find(".newdod, .dod, .editdod");
 
     rows.each(function (index) {
         var row = {};
         row["position"] = index;
-        if ($(this).attr("dodid")) {
+
+        if ($(this).hasClass("editdod"))
+        {
+            row["id"] = $(this).attr("dodid");
+            row["title"] = $(this).find(".newdodTitle").val();
+            row["text"] = $(this).find(".newdodDescription").val();
+        }
+        else if ($(this).hasClass("dod")) {
             row["id"] = $(this).attr("dodid");
         }
         else {

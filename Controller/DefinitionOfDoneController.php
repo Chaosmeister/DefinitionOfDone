@@ -9,22 +9,23 @@ class DefinitionOfDoneController extends BaseController
     public function save()
     {
         $values = $this->request->getJson();
+        $user = $this->getUser();
 
-        if (!empty($values)) {
-            if (!empty($values['task_id'])) {
-                $task_id = $values['task_id'];
+        if (!empty($values) && !empty($values['task_id'])) {
+            $task_id = $values['task_id'];
 
-                foreach ($values["entries"] as $entry) {
-                    $entry["task_id"] = $task_id;
-                    $this->definitionOfDoneModel->save($entry);
+            foreach ($values["entries"] as $entry) {
+                $entry["task_id"] = $task_id;
+
+                if (isset($entry['title']) || isset($entry['text'])) {
+                    $entry['user_id'] = $user['id'];
                 }
 
-                $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task_id)));
+                $this->definitionOfDoneModel->save($entry);
             }
-            $this->logger->error("missing task_id");
+
+            $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task_id)));
         }
-        
-        $this->logger->error("missing values");
     }
 
     public function edit()
@@ -87,13 +88,10 @@ class DefinitionOfDoneController extends BaseController
         } else {
             $html .= '<td class="dodStatus">';
             if ($dod['status'] == 0) {
-                $html .= $this->helper->url->icon('play', '', 'DefinitionOfDoneController', 'start', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodStart');
+                $html .= $this->helper->url->icon('square-o', '', 'DefinitionOfDoneController', 'start', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodStart');
             }
             if ($dod['status'] == 1) {
                 $html .= $this->helper->url->icon('gears', '', 'DefinitionOfDoneController', 'stop', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodstop');
-            }
-            if ($dod['status'] == 1) {
-                $html .= $this->helper->url->icon('stop', '', 'DefinitionOfDoneController', 'clear', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodstop');
             }
             $html .= '</td>';
             $html .= '<td class="dodTitle">';
@@ -101,7 +99,9 @@ class DefinitionOfDoneController extends BaseController
             $html .= '</td>';
             $html .= '<td class="dodAssignee">';
             $html .= '</td>';
-            $html .= $this->userModel->getById($dod['user_id']);
+            if ($dod['user_id']) {
+                $html .= $this->userModel->getById($dod['user_id'])['name'];
+            }
             $html .= '</td>';
             $html .= '<td class="dodText">';
             $html .= $dod['text'];
@@ -120,7 +120,12 @@ class DefinitionOfDoneController extends BaseController
     {
         $task_id = $this->request->getIntegerParam('task_id');
 
-        $html = '<tr class="newdod">';
+        $html = "";
+        if (isset($dod['id'])) {
+            $html = '<tr class="editdod" dodId="' . $dod['id'] . '">';
+        } else {
+            $html = '<tr class="newdod">';
+        }
         $html .= '<td class="dodOptions">';
         $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></i>';
         $html .= '<i class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></i>';
@@ -130,20 +135,20 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
         $html .= '<td class="dodTitle">';
+        $html .= '<input class="dodInput newdodTitle"';
         if (isset($dod["title"])) {
-            $html .= '<input class="dodInput newdodTitle" value="' . $dod["title"] . '">';
+            $html .= ' value="' . $dod["title"] . '">';
         } else {
-            $html .= '<input class="dodInput newdodTitle">';
+            $html .= '>';
         }
         $html .= '</td>';
         $html .= '<td class="dodAssignee">';
         $html .= '</td>';
         $html .= '</td>';
         $html .= '<td class="doddescription">';
+        $html .= '<textarea class="dodInput newdodDescription">';
         if (isset($dod["text"])) {
-            $html .= '<textarea class="dodInput newdodDescription" value="' . $dod["text"] . '">';
-        } else {
-            $html .= '<textarea class="dodInput newdodDescription">';
+            $html .= $dod["text"];
         }
         $html .= '</textarea>';
         $html .= '</td>';
