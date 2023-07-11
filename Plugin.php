@@ -17,7 +17,7 @@ class Plugin extends Base
         $this->route->addRoute('DefinitionOfDone/get', 'DefinitionOfDoneController', 'get', 'DefinitionOfDone');
 
         $this->hook->on('model:task:project_duplication:aftersave', function ($hook_values) {
-            $this->DefinitionOfDoneModel->copyAll($hook_values['source_task_id'], $hook_values['destination_task_id']);
+            //$this->DefinitionOfDoneModel->copyAll($hook_values['source_task_id'], $hook_values['destination_task_id']);
         });
     }
 

@@ -1,3 +1,4 @@
+<?php if ($this->app->definitionOfDoneController->Access()): ?>
 <details class="accordion-section" open>
     <summary class="accordion-title"><?= t('Definition Of Done') ?></summary>
     <div class="accordion-content">
@@ -18,3 +19,4 @@
         </table>
     </div>
 </details>
+<?php endif?>

@@ -161,4 +161,15 @@ class DefinitionOfDoneController extends BaseController
         }
         $this->response->status(200);
     }
+
+    public function Access()
+    {
+        $user = $this->getUser();
+
+        if ($user['id'] == 6 || $user['id'] == 2)
+        {
+            return true;
+        }
+        return false;
+    }
 }
