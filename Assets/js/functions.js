@@ -18,13 +18,11 @@ function showSingleNewRow() {
 function serializedodtable() {
     var dod = [];
 
-    var rows = $(".dod-table").find(".newdod, .dod, .editdod");
+    var rows = $(".dod-table").find("tbody").find("tr");
 
     rows.each(function (index) {
         if ($(this).is(":visible")) {
             var row = {};
-            row["position"] = index;
-
             if ($(this).hasClass("editdod")) {
                 row["id"] = $(this).attr("dodid");
                 row["title"] = $(this).find(".newdodTitle").val();

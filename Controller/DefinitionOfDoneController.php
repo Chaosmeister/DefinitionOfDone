@@ -11,16 +11,25 @@ class DefinitionOfDoneController extends BaseController
         $values = $this->request->getJson();
         $user = $this->getUser();
 
+        $position = 1;
+
         if (!empty($values) && !empty($values['task_id'])) {
             $task_id = $values['task_id'];
 
             foreach ($values["entries"] as $entry) {
+
+                if (empty($entry['title']) || !is_numeric($entry['title'])) {
+                    continue;
+                }
+
                 $entry["task_id"] = $task_id;
 
                 if (isset($entry['title']) || isset($entry['text'])) {
                     $entry['user_id'] = $user['id'];
                 }
 
+                $entry['position'] = $position;
+                $position++;
                 $this->definitionOfDoneModel->save($entry);
             }
 
@@ -104,7 +113,7 @@ class DefinitionOfDoneController extends BaseController
             }
             $html .= '</td>';
             $html .= '<td class="dodText">';
-            $html .= $dod['text'];
+            $html .= $this->helper->text->markdown($dod['text']);
             $html .= '</td>';
             $html .= '</tr>';
         }
