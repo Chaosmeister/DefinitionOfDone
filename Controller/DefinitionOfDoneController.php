@@ -101,8 +101,6 @@ class DefinitionOfDoneController extends BaseController
             $html .= '<td class="dodText">';
             $html .= $dod['text'];
             $html .= '</td>';
-            $html .= '<td class="dodTimer">';
-            $html .= '</td>';
             $html .= '</tr>';
         }
         return $html;
@@ -144,8 +142,6 @@ class DefinitionOfDoneController extends BaseController
         }
         $html .= '</textarea>';
         $html .= '</td>';
-        $html .= '<td class="dodTimer">';
-        $html .= '</td>';
         $html .= '</tr>';
 
         return $html;
@@ -164,6 +160,8 @@ class DefinitionOfDoneController extends BaseController
 
     public function Access()
     {
+        return true;
+        
         $user = $this->getUser();
 
         if ($user['id'] == 6 || $user['id'] == 2)

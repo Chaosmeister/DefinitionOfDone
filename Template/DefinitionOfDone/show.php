@@ -10,7 +10,6 @@
                     <th><?= t('Title') ?></th>
                     <th><?= t('Assignee') ?></th>
                     <th><?= t('Description') ?></th>
-                    <th><?= t('Time tracking') ?></th>
                 </tr>
             </thead>
             <tbody>
