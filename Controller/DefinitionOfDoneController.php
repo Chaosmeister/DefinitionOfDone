@@ -160,8 +160,6 @@ class DefinitionOfDoneController extends BaseController
 
     public function Access()
     {
-        return true;
-        
         $user = $this->getUser();
 
         if ($user['id'] == 6 || $user['id'] == 2)
