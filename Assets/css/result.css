@@ -17,3 +17,7 @@ textarea.dodInput {
 .dod-draggable-row-handle:hover {
     color: var(--color-primary)
 }
+
+.dodText {
+    white-space: pre
+}
