@@ -10,16 +10,21 @@ class DefinitionOfDoneController extends BaseController
     {
         $values = $this->request->getJson();
 
-        if (!empty($values) && !empty($values['task_id'])) {
-            $task_id = $values['task_id'];
+        if (!empty($values)) {
+            if (!empty($values['task_id'])) {
+                $task_id = $values['task_id'];
 
-            foreach ($values["entries"] as $entry) {
-                $entry["task_id"] = $task_id;
-                $this->definitionOfDoneModel->save($entry);
+                foreach ($values["entries"] as $entry) {
+                    $entry["task_id"] = $task_id;
+                    $this->definitionOfDoneModel->save($entry);
+                }
+
+                $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task_id)));
             }
-
-            $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task_id)));
+            $this->logger->error("missing task_id");
         }
+        
+        $this->logger->error("missing values");
     }
 
     public function edit()
@@ -162,8 +167,7 @@ class DefinitionOfDoneController extends BaseController
     {
         $user = $this->getUser();
 
-        if ($user['is_admin'] == 1 || $user['id'] == 6 || $user['id'] == 2)
-        {
+        if ($user['is_admin'] == 1 || $user['id'] == 6 || $user['id'] == 2) {
             return true;
         }
         return false;
