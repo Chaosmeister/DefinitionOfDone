@@ -33,7 +33,7 @@ function serializedodtable() {
             else if ($(this).hasClass("dod")) {
                 row["id"] = $(this).attr("dodid");
             }
-            else {
+            else if ($(this).hasClass("newdod")){
                 row["title"] = $(this).find(".newdodTitle").val();
                 row["text"] = $(this).find(".newdodDescription").val();
             }
@@ -119,7 +119,11 @@ KB.on('dom.ready', function () {
         dodJson['task_id'] = e.target.getAttribute("taskid");
 
         const link = '?controller=DefinitionOfDoneController&action=save&plugin=DefinitionOfDone';
-        KB.http.postJson(link, dodJson);
+        KB.http.postJson(link, dodJson).success(function(newtable){
+            var rows = $(".dod-table").find("tbody").find("tr");
+            rows.remove();
+            $(".dod-table").find("tbody").append($(newtable));
+        });
     });
 
     $(document).on('click', '.dodSelect', function (e) {
@@ -171,7 +175,6 @@ KB.on('dom.ready', function () {
     }
 
     KB.on('dom.ready', dodbootstrap);
-    KB.on('dod.reloaded', dodbootstrap);
 });
 
 function resizeEvent(event) {

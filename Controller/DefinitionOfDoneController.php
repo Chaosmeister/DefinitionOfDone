@@ -24,7 +24,7 @@ class DefinitionOfDoneController extends BaseController
                 $this->definitionOfDoneModel->save($entry);
             }
 
-            $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task_id)));
+            $this->response->html($this->rows($task_id));
         }
     }
 
