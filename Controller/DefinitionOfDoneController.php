@@ -98,9 +98,9 @@ class DefinitionOfDoneController extends BaseController
             $html .= $dod['title'];
             $html .= '</td>';
             $html .= '<td class="dodAssignee">';
-            $html .= '</td>';
             if ($dod['user_id']) {
-                $html .= $this->userModel->getById($dod['user_id'])['name'];
+                $user = $this->userModel->getById($dod['user_id']);
+                $html .= $user['username'];
             }
             $html .= '</td>';
             $html .= '<td class="dodText">';
@@ -129,7 +129,13 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td class="dodOptions">';
         $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></i>';
         $html .= '<i class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></i>';
-        $html .= '<i class="fa fa-fw fa-trash button newdodTrash"></i>';
+
+        if (isset($dod)) {
+            $html .= '<i class="fa fa-fw fa-trash button editdodTrash"></i>';
+        } else {
+            $html .= '<i class="fa fa-fw fa-trash button newdodTrash"></i>';
+        }
+
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
         $html .= '</td>';
         $html .= '<td class="dodStatus">';

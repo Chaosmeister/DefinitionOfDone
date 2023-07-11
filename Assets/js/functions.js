@@ -21,24 +21,25 @@ function serializedodtable() {
     var rows = $(".dod-table").find(".newdod, .dod, .editdod");
 
     rows.each(function (index) {
-        var row = {};
-        row["position"] = index;
+        if ($(this).is(":visible")) {
+            var row = {};
+            row["position"] = index;
 
-        if ($(this).hasClass("editdod"))
-        {
-            row["id"] = $(this).attr("dodid");
-            row["title"] = $(this).find(".newdodTitle").val();
-            row["text"] = $(this).find(".newdodDescription").val();
-        }
-        else if ($(this).hasClass("dod")) {
-            row["id"] = $(this).attr("dodid");
-        }
-        else {
-            row["title"] = $(this).find(".newdodTitle").val();
-            row["text"] = $(this).find(".newdodDescription").val();
-        }
+            if ($(this).hasClass("editdod")) {
+                row["id"] = $(this).attr("dodid");
+                row["title"] = $(this).find(".newdodTitle").val();
+                row["text"] = $(this).find(".newdodDescription").val();
+            }
+            else if ($(this).hasClass("dod")) {
+                row["id"] = $(this).attr("dodid");
+            }
+            else {
+                row["title"] = $(this).find(".newdodTitle").val();
+                row["text"] = $(this).find(".newdodDescription").val();
+            }
 
-        dod.push(row);
+            dod.push(row);
+        }
     });
 
     return dod;
@@ -66,7 +67,14 @@ KB.on('dom.ready', function () {
     $(document).on('click', '.newdodTrash', function (e) {
         e.preventDefault();
         this.closest(".newdod").remove();
+        showSingleNewRow();
+    });
 
+    $(document).on('click', '.editdodTrash', function (e) {
+        e.preventDefault();
+        var el = $(this);
+        el.closest("tr").next().show();
+        el.closest("tr").remove();
         showSingleNewRow();
     });
 
@@ -77,7 +85,9 @@ KB.on('dom.ready', function () {
         var url = el.attr('href');
 
         KB.http.get(url).success(function (data) {
-            el.closest("tr").replaceWith($(data));
+            var tr = el.closest("tr");
+            tr.hide();
+            $(data).insertBefore(tr);
         });
     });
 
@@ -97,7 +107,7 @@ KB.on('dom.ready', function () {
             const link = '?controller=DefinitionOfDoneController&action=trash&plugin=DefinitionOfDone';
             KB.http.postJson(link, dodJson)
         }
-        
+
         showSingleNewRow();
     });
 
