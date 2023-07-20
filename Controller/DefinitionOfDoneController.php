@@ -55,7 +55,7 @@ class DefinitionOfDoneController extends BaseController
 
     public function rows($task_id)
     {
-        $dods = $this->definitionOfDoneModel->getAllById($task_id);
+        $dods = $this->definitionOfDoneModel->getAll($task_id);
         $html = "";
         foreach ($dods as $dod) {
             $html .= $this->row($dod, $task_id);

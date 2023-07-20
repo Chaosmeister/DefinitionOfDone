@@ -16,7 +16,7 @@ class DefinitionOfDoneModel extends Base
         return $this->table()->eq('id', $Id)->findOne();
     }
 
-    public function getAllById($taskId)
+    public function getAll($taskId)
     {
         return $this->table()->eq('task_id', $taskId)->orderBy("position")->findAll();
     }
