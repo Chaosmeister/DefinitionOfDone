@@ -74,7 +74,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td colspan=99>';
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
         $html .= '</td>';
-        $html .= '<tr>';
+        $html .= '</tr>';
 
         return $html;
     }
