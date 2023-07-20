@@ -4,6 +4,15 @@ namespace Kanboard\Plugin\DefinitionOfDone\Controller;
 
 use Kanboard\Controller\BaseController;
 
+function isEmpty($variable)
+{
+    $empty = empty($variable);
+    if ($empty) {
+        return $variable == "";
+    }
+    return  false;
+}
+
 class DefinitionOfDoneController extends BaseController
 {
     public function save()
@@ -18,7 +27,8 @@ class DefinitionOfDoneController extends BaseController
 
             foreach ($values["entries"] as $entry) {
 
-                if (empty($entry['title']) || !is_numeric($entry['title'])) {
+                if (sizeof($entry) > 1 && isEmpty($entry['title'])) {
+                    // invalid entry, skip
                     continue;
                 }
 
