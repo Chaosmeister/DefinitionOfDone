@@ -31,7 +31,7 @@ function serializedodtable() {
             else if ($(this).hasClass("dod")) {
                 row["id"] = $(this).attr("dodid");
             }
-            else if ($(this).hasClass("newdod")){
+            else if ($(this).hasClass("newdod")) {
                 row["title"] = $(this).find(".newdodTitle").val();
                 row["text"] = $(this).find(".newdodDescription").val();
             }
@@ -117,11 +117,24 @@ KB.on('dom.ready', function () {
         dodJson['task_id'] = e.target.getAttribute("taskid");
 
         const link = '?controller=DefinitionOfDoneController&action=save&plugin=DefinitionOfDone';
-        KB.http.postJson(link, dodJson).success(function(newtable){
+        KB.http.postJson(link, dodJson).success(function (newtable) {
             var rows = $(".dod-table").find("tbody").find("tr");
             rows.remove();
             $(".dod-table").find("tbody").append($(newtable));
         });
+    });
+
+    $(document).on('click', '.dodStateToggle', function (e) {
+        e.preventDefault();
+
+        let el = $(this);
+        let url = el.attr('href');
+
+        let icon = el.find('i');
+        icon.toggleClass("fa-square-o");
+        icon.toggleClass("fa-check-square-o");
+
+        KB.http.get(url);
     });
 
     $(document).on('click', '.dodSelect', function (e) {

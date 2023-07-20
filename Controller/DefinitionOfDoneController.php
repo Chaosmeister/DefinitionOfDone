@@ -106,12 +106,11 @@ class DefinitionOfDoneController extends BaseController
             $html .= '</td>';
         } else {
             $html .= '<td class="dodStatus">';
-            if ($dod['status'] == 0) {
-                $html .= $this->helper->url->icon('square-o', '', 'DefinitionOfDoneController', 'start', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodStart');
+            $status = 'square-o';
+            if ($dod['status'] != 0) {
+                $status = 'check-' . $status;
             }
-            if ($dod['status'] == 1) {
-                $html .= $this->helper->url->icon('gears', '', 'DefinitionOfDoneController', 'stop', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodstop');
-            }
+            $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle');
             $html .= '</td>';
             $html .= '<td class="dodTitle">';
             $html .= $dod['title'];
@@ -193,7 +192,7 @@ class DefinitionOfDoneController extends BaseController
         $this->response->status(200);
     }
 
-    public function Access()
+    public function access()
     {
         $user = $this->getUser();
 
@@ -201,5 +200,12 @@ class DefinitionOfDoneController extends BaseController
             return true;
         }
         return false;
+    }
+
+    public function toggle()
+    {
+        $dod_id = $this->request->getIntegerParam('dod_id');
+
+        $this->definitionOfDoneModel->toggleState($dod_id);
     }
 }

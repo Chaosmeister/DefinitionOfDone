@@ -97,4 +97,17 @@ class DefinitionOfDoneModel extends Base
 
         return !in_array(false, $results, true);
     }
+
+    public function toggleState(int $id)
+    {
+        $entry = $this->getById($id);
+
+        if ($entry['status'] == 0) {
+            $entry['status'] = 1;
+        } else {
+            $entry['status'] = 0;
+        }
+
+        $this->save($entry);
+    }
 }
