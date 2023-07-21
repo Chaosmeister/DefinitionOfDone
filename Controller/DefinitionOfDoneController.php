@@ -21,30 +21,35 @@ class DefinitionOfDoneController extends BaseController
         $user = $this->getUser();
 
         $position = 1;
+        if (empty($values)) {
+            $this->response->status(422);
+        }
 
-        if (!empty($values) && !empty($values['task_id'])) {
+        $task_id = $this->request->getIntegerParam('task_id');
+        if (!empty($values['task_id'])) {
+
             $task_id = $values['task_id'];
+        }
 
-            foreach ($values["entries"] as $entry) {
+        foreach ($values["entries"] as $entry) {
 
-                if (sizeof($entry) > 1 && isEmpty($entry['title'])) {
-                    // invalid entry, skip
-                    continue;
-                }
-
-                $entry["task_id"] = $task_id;
-
-                if (isset($entry['title']) || isset($entry['text'])) {
-                    $entry['user_id'] = $user['id'];
-                }
-
-                $entry['position'] = $position;
-                $position++;
-                $this->definitionOfDoneModel->save($entry);
+            if (sizeof($entry) > 1 && isEmpty($entry['title'])) {
+                // invalid entry, skip
+                continue;
             }
 
-            $this->response->html($this->rows($task_id));
+            $entry["task_id"] = $task_id;
+
+            if (isset($entry['title']) || isset($entry['text'])) {
+                $entry['user_id'] = $user['id'];
+            }
+
+            $entry['position'] = $position;
+            $position++;
+            $this->definitionOfDoneModel->save($entry);
         }
+
+        $this->response->html($this->rows($task_id));
     }
 
     public function edit()
@@ -224,14 +229,18 @@ class DefinitionOfDoneController extends BaseController
     {
         $task_id = $this->request->getIntegerParam('task_id');
 
-        $export = array();
+        $export = array('entries' => array());
 
         $dods = $this->definitionOfDoneModel->getAll($task_id);
-        
+
         foreach ($dods as $dod) {
-            array_push($export, array('title' => $dod['title'], 'text' => $dod['text']));
+            array_push($export['entries'], array('title' => $dod['title'], 'text' => $dod['text']));
         }
 
-        $this->response->json($export);
+        if (empty($export['entries'])) {
+            $this->response->status(422);
+        } else {
+            $this->response->json($export);
+        }
     }
 }
