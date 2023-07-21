@@ -43,6 +43,30 @@ function serializedodtable() {
     return dod;
 }
 
+const getJsonUpload = () =>
+    new Promise(resolve => {
+        const inputFileElement = document.createElement('input')
+        inputFileElement.setAttribute('type', 'file')
+        inputFileElement.setAttribute('multiple', 'false')
+        inputFileElement.setAttribute('accept', '.json')
+
+        inputFileElement.addEventListener(
+            'change',
+            async (event) => {
+                const { files } = event.target
+                if (!files) {
+                    return
+                }
+
+                const filePromises = [...files].map(file => file.text())
+
+                resolve(await Promise.all(filePromises))
+            },
+            false,
+        )
+        inputFileElement.click()
+    })
+
 KB.on('dom.ready', function () {
     $(document).on('click', '.dodNew', function (e) {
         e.preventDefault();
@@ -145,6 +169,31 @@ KB.on('dom.ready', function () {
         this.closest(".dod").classList.toggle("dod-selected");
     });
 
+    $(document).on('click', '.dodExport', function (e) {
+        e.preventDefault();
+
+        var el = $(this);
+        var url = el.attr('href');
+
+        KB.http.get(url).success(function (data) {
+            let downloadObject = document.createElement("a");
+            downloadObject.download = "dod_" + Date.now() + ".json";
+            downloadObject.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)]));
+            downloadObject.click();
+        });
+    });
+
+    $(document).on('click', '.dodImport', async function (e) {
+        e.preventDefault();
+
+        var el = $(this);
+        var url = el.attr('href');
+        const json = JSON.parse(await getJsonUpload());
+
+        KB.http.postJson(url, json).success(function (data) {
+        });
+    });
+
     function dodsavePosition(dodid, position) {
         var url = $(".dod-table").data("save-position-url");
 
@@ -185,7 +234,7 @@ KB.on('dom.ready', function () {
         });
     }
 
-    KB.on('dom.ready', dodbootstrap);
+    dodbootstrap();
 });
 
 function resizeEvent(event) {

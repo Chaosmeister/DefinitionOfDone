@@ -219,4 +219,19 @@ class DefinitionOfDoneController extends BaseController
 
         $this->definitionOfDoneModel->save($entry);
     }
+
+    public function export()
+    {
+        $task_id = $this->request->getIntegerParam('task_id');
+
+        $export = array();
+
+        $dods = $this->definitionOfDoneModel->getAll($task_id);
+        
+        foreach ($dods as $dod) {
+            array_push($export, array('title' => $dod['title'], 'text' => $dod['text']));
+        }
+
+        $this->response->json($export);
+    }
 }
