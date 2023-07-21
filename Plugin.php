@@ -13,9 +13,9 @@ class Plugin extends Base
         $this->hook->on('template:layout:js', array('template' => 'plugins/DefinitionOfDone/Assets/js/functions.js'));
         $this->hook->on('template:layout:css', array('template' => 'plugins/DefinitionOfDone/Assets/css/result.css'));
 
-        //$this->hook->on('model:task:project_duplication:aftersave', function ($hook_values) {
-        //    $this->DefinitionOfDoneModel->copyAll($hook_values['source_task_id'], $hook_values['destination_task_id']);
-        //});
+        $this->hook->on('model:task:project_duplication:aftersave', function ($hook_values) {
+            $this->definitionOfDoneModel->copyAll($hook_values['source_task_id'], $hook_values['destination_task_id']);
+        });
     }
 
     public function getPluginName()

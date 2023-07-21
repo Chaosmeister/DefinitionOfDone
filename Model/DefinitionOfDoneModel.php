@@ -32,6 +32,19 @@ class DefinitionOfDoneModel extends Base
         $this->db->closeTransaction();
     }
 
+    public function copyAll($source, $target)
+    {
+        $this->db->startTransaction();
+        $entries = $this->getAll($source);
+
+        foreach ($entries as $entry) {
+            $entry['task_id'] = $target;
+            $this->save($entry);
+        }
+
+        $this->db->closeTransaction();
+    }
+
     public function save($entry)
     {
         if (isset($entry['id'])) {
