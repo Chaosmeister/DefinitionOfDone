@@ -205,7 +205,18 @@ class DefinitionOfDoneController extends BaseController
     public function toggle()
     {
         $dod_id = $this->request->getIntegerParam('dod_id');
+        $user = $this->getUser();
 
-        $this->definitionOfDoneModel->toggleState($dod_id);
+        $entry = $this->definitionOfDoneModel->getById($dod_id);
+
+        if ($entry['status'] == 0) {
+            $entry['status'] = 1;
+        } else {
+            $entry['status'] = 0;
+        }
+
+        $entry['user_id'] = $user['id'];
+
+        $this->definitionOfDoneModel->save($entry);
     }
 }
