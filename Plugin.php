@@ -8,7 +8,7 @@ class Plugin extends Base
 {
     public function initialize()
     {
-        $this->template->hook->attach("template:task:show:before-internal-links", "DefinitionOfDone:DefinitionOfDone/show");
+        $this->template->hook->attach("template:task:show:before-subtasks", "DefinitionOfDone:DefinitionOfDone/show");
 
         $this->hook->on('template:layout:js', array('template' => 'plugins/DefinitionOfDone/Assets/js/functions.js'));
         $this->hook->on('template:layout:css', array('template' => 'plugins/DefinitionOfDone/Assets/css/result.css'));

@@ -234,7 +234,17 @@ KB.on('dom.ready', function () {
         });
     }
 
+    function dodReorder() {
+        let main = $(".dodmain");
+        let li = main.next("li");
+        if (li.length != 0)
+        {
+            main.insertAfter(li);
+        }
+    }
+
     dodbootstrap();
+    dodReorder();
 });
 
 function resizeEvent(event) {
