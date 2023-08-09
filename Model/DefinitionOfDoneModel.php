@@ -3,12 +3,20 @@
 namespace Kanboard\Plugin\DefinitionOfDone\Model;
 
 use Kanboard\Core\Base;
+use Kanboard\Plugin\DefinitionOfDoneEventJob;
 
 class DefinitionOfDoneModel extends Base
 {
     protected function table()
     {
         return $this->db->table("definition_of_done");
+    }
+
+    protected function CreateEvent($event)
+    {
+        $table = $this->db->table("project_activities");
+
+        $table->insert($event);
     }
 
     public function getById($Id)
@@ -43,6 +51,17 @@ class DefinitionOfDoneModel extends Base
         }
 
         $this->table()->insert($entry);
+
+        $projectId = $this->taskFinderModel->getProjectId($entry['task_id']);
+        $userId = $this->userSession->getId();
+        $this->CreateEvent(array(
+            'event_name' => 'DefinitionOfDone.create',
+            'date_creation' => time(),
+            'creator_id' => $userId,
+            'task_id' => $entry['task_id'],
+            'project_id' => $projectId,
+            'data' => json_encode(array('title' => $entry['title'], 'text' => $entry['text']))
+        ));
     }
 
     public function copy($sourceId, $destinationId)
