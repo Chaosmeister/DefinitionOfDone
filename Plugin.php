@@ -8,16 +8,13 @@ class Plugin extends Base
 {
     public function initialize()
     {
-        $this->template->hook->attach("template:task:show:before-internal-links", "DefinitionOfDone:DefinitionOfDone/show");
+        $this->template->hook->attach("template:task:show:before-subtasks", "DefinitionOfDone:DefinitionOfDone/show");
 
         $this->hook->on('template:layout:js', array('template' => 'plugins/DefinitionOfDone/Assets/js/functions.js'));
         $this->hook->on('template:layout:css', array('template' => 'plugins/DefinitionOfDone/Assets/css/result.css'));
 
-        $this->route->addRoute('DefinitionOfDone/save', 'DefinitionOfDoneController', 'save', 'DefinitionOfDone');
-        $this->route->addRoute('DefinitionOfDone/get', 'DefinitionOfDoneController', 'get', 'DefinitionOfDone');
-
         $this->hook->on('model:task:project_duplication:aftersave', function ($hook_values) {
-            $this->DefinitionOfDoneModel->copyAll($hook_values['source_task_id'], $hook_values['destination_task_id']);
+            $this->definitionOfDoneModel->copyAll($hook_values['source_task_id'], $hook_values['destination_task_id']);
         });
     }
 

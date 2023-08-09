@@ -4,22 +4,52 @@ namespace Kanboard\Plugin\DefinitionOfDone\Controller;
 
 use Kanboard\Controller\BaseController;
 
+function isEmpty($variable)
+{
+    $empty = empty($variable);
+    if ($empty) {
+        return $variable == "";
+    }
+    return  false;
+}
+
 class DefinitionOfDoneController extends BaseController
 {
     public function save()
     {
         $values = $this->request->getJson();
+        $user = $this->getUser();
 
-        if (!empty($values) && !empty($values['task_id'])) {
+        $position = 1;
+        if (empty($values)) {
+            $this->response->status(422);
+        }
+
+        $task_id = $this->request->getIntegerParam('task_id');
+        if (!empty($values['task_id'])) {
+
             $task_id = $values['task_id'];
+        }
 
-            foreach ($values["entries"] as $entry) {
-                $entry["task_id"] = $task_id;
-                $this->definitionOfDoneModel->save($entry);
+        foreach ($values["entries"] as $entry) {
+
+            if (sizeof($entry) > 1 && isEmpty($entry['title'])) {
+                // invalid entry, skip
+                continue;
             }
 
-            $this->response->redirect($this->helper->url->to('TaskViewController', 'show', array('task_id' => $task_id)));
+            $entry["task_id"] = $task_id;
+
+            if (isset($entry['title']) || isset($entry['text'])) {
+                $entry['user_id'] = $user['id'];
+            }
+
+            $entry['position'] = $position;
+            $position++;
+            $this->definitionOfDoneModel->save($entry);
         }
+
+        $this->response->html($this->rows($task_id));
     }
 
     public function edit()
@@ -40,7 +70,7 @@ class DefinitionOfDoneController extends BaseController
 
     public function rows($task_id)
     {
-        $dods = $this->definitionOfDoneModel->getAllById($task_id);
+        $dods = $this->definitionOfDoneModel->getAll($task_id);
         $html = "";
         foreach ($dods as $dod) {
             $html .= $this->row($dod, $task_id);
@@ -59,7 +89,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td colspan=99>';
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
         $html .= '</td>';
-        $html .= '<tr>';
+        $html .= '</tr>';
 
         return $html;
     }
@@ -81,27 +111,23 @@ class DefinitionOfDoneController extends BaseController
             $html .= '</td>';
         } else {
             $html .= '<td class="dodStatus">';
-            if ($dod['status'] == 0) {
-                $html .= $this->helper->url->icon('play', '', 'DefinitionOfDoneController', 'start', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodStart');
+            $status = 'square-o';
+            if ($dod['status'] != 0) {
+                $status = 'check-' . $status;
             }
-            if ($dod['status'] == 1) {
-                $html .= $this->helper->url->icon('gears', '', 'DefinitionOfDoneController', 'stop', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodstop');
-            }
-            if ($dod['status'] == 1) {
-                $html .= $this->helper->url->icon('stop', '', 'DefinitionOfDoneController', 'clear', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodstop');
-            }
+            $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle');
             $html .= '</td>';
             $html .= '<td class="dodTitle">';
             $html .= $dod['title'];
             $html .= '</td>';
             $html .= '<td class="dodAssignee">';
-            $html .= '</td>';
-            $html .= $this->userModel->getById($dod['user_id']);
+            if ($dod['user_id']) {
+                $user = $this->userModel->getById($dod['user_id']);
+                $html .= $user['name'];
+            }
             $html .= '</td>';
             $html .= '<td class="dodText">';
-            $html .= $dod['text'];
-            $html .= '</td>';
-            $html .= '<td class="dodTimer">';
+            $html .= $this->helper->text->markdown($dod['text']);
             $html .= '</td>';
             $html .= '</tr>';
         }
@@ -117,34 +143,43 @@ class DefinitionOfDoneController extends BaseController
     {
         $task_id = $this->request->getIntegerParam('task_id');
 
-        $html = '<tr class="newdod">';
+        $html = "";
+        if (isset($dod['id'])) {
+            $html = '<tr class="editdod" dodId="' . $dod['id'] . '">';
+        } else {
+            $html = '<tr class="newdod">';
+        }
         $html .= '<td class="dodOptions">';
         $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></i>';
         $html .= '<i class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></i>';
-        $html .= '<i class="fa fa-fw fa-trash button newdodTrash"></i>';
+
+        if (isset($dod)) {
+            $html .= '<i class="fa fa-fw fa-trash button editdodTrash"></i>';
+        } else {
+            $html .= '<i class="fa fa-fw fa-trash button newdodTrash"></i>';
+        }
+
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
         $html .= '</td>';
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
         $html .= '<td class="dodTitle">';
+        $html .= '<input class="dodInput newdodTitle"';
         if (isset($dod["title"])) {
-            $html .= '<input class="dodInput newdodTitle" value="' . $dod["title"] . '">';
+            $html .= ' value="' . $dod["title"] . '">';
         } else {
-            $html .= '<input class="dodInput newdodTitle">';
+            $html .= '>';
         }
         $html .= '</td>';
         $html .= '<td class="dodAssignee">';
         $html .= '</td>';
         $html .= '</td>';
         $html .= '<td class="doddescription">';
+        $html .= '<textarea class="dodInput newdodDescription">';
         if (isset($dod["text"])) {
-            $html .= '<textarea class="dodInput newdodDescription" value="' . $dod["text"] . '">';
-        } else {
-            $html .= '<textarea class="dodInput newdodDescription">';
+            $html .= $dod["text"];
         }
         $html .= '</textarea>';
-        $html .= '</td>';
-        $html .= '<td class="dodTimer">';
         $html .= '</td>';
         $html .= '</tr>';
 
@@ -160,5 +195,52 @@ class DefinitionOfDoneController extends BaseController
             $this->response->status(400);
         }
         $this->response->status(200);
+    }
+
+    public function access()
+    {
+        $user = $this->getUser();
+
+        if (isset($user['is_admin']) || $user['id'] == 6 || $user['id'] == 2) {
+            return true;
+        }
+        return false;
+    }
+
+    public function toggle()
+    {
+        $dod_id = $this->request->getIntegerParam('dod_id');
+        $user = $this->getUser();
+
+        $entry = $this->definitionOfDoneModel->getById($dod_id);
+
+        if ($entry['status'] == 0) {
+            $entry['status'] = 1;
+        } else {
+            $entry['status'] = 0;
+        }
+
+        $entry['user_id'] = $user['id'];
+
+        $this->definitionOfDoneModel->save($entry);
+    }
+
+    public function export()
+    {
+        $task_id = $this->request->getIntegerParam('task_id');
+
+        $export = array('entries' => array());
+
+        $dods = $this->definitionOfDoneModel->getAll($task_id);
+
+        foreach ($dods as $dod) {
+            array_push($export['entries'], array('title' => $dod['title'], 'text' => $dod['text']));
+        }
+
+        if (empty($export['entries'])) {
+            $this->response->status(422);
+        } else {
+            $this->response->json($export);
+        }
     }
 }

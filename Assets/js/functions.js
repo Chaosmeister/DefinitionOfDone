@@ -18,24 +18,54 @@ function showSingleNewRow() {
 function serializedodtable() {
     var dod = [];
 
-    var rows = $(".dod-table").find(".newdod, .dod");
+    var rows = $(".dod-table").find("tbody").find("tr");
 
     rows.each(function (index) {
-        var row = {};
-        row["position"] = index;
-        if ($(this).attr("dodid")) {
-            row["id"] = $(this).attr("dodid");
-        }
-        else {
-            row["title"] = $(this).find(".newdodTitle").val();
-            row["text"] = $(this).find(".newdodDescription").val();
-        }
+        if ($(this).is(":visible")) {
+            var row = {};
+            if ($(this).hasClass("editdod")) {
+                row["id"] = $(this).attr("dodid");
+                row["title"] = $(this).find(".newdodTitle").val();
+                row["text"] = $(this).find(".newdodDescription").val();
+            }
+            else if ($(this).hasClass("dod")) {
+                row["id"] = $(this).attr("dodid");
+            }
+            else if ($(this).hasClass("newdod")) {
+                row["title"] = $(this).find(".newdodTitle").val();
+                row["text"] = $(this).find(".newdodDescription").val();
+            }
 
-        dod.push(row);
+            dod.push(row);
+        }
     });
 
     return dod;
 }
+
+const getJsonUpload = () =>
+    new Promise(resolve => {
+        const inputFileElement = document.createElement('input')
+        inputFileElement.setAttribute('type', 'file')
+        inputFileElement.setAttribute('multiple', 'false')
+        inputFileElement.setAttribute('accept', '.json')
+
+        inputFileElement.addEventListener(
+            'change',
+            async (event) => {
+                const { files } = event.target
+                if (!files) {
+                    return
+                }
+
+                const filePromises = [...files].map(file => file.text())
+
+                resolve(await Promise.all(filePromises))
+            },
+            false,
+        )
+        inputFileElement.click()
+    })
 
 KB.on('dom.ready', function () {
     $(document).on('click', '.dodNew', function (e) {
@@ -59,7 +89,14 @@ KB.on('dom.ready', function () {
     $(document).on('click', '.newdodTrash', function (e) {
         e.preventDefault();
         this.closest(".newdod").remove();
+        showSingleNewRow();
+    });
 
+    $(document).on('click', '.editdodTrash', function (e) {
+        e.preventDefault();
+        var el = $(this);
+        el.closest("tr").next().show();
+        el.closest("tr").remove();
         showSingleNewRow();
     });
 
@@ -70,7 +107,9 @@ KB.on('dom.ready', function () {
         var url = el.attr('href');
 
         KB.http.get(url).success(function (data) {
-            el.closest("tr").replaceWith($(data));
+            var tr = el.closest("tr");
+            tr.hide();
+            $(data).insertBefore(tr);
         });
     });
 
@@ -90,7 +129,7 @@ KB.on('dom.ready', function () {
             const link = '?controller=DefinitionOfDoneController&action=trash&plugin=DefinitionOfDone';
             KB.http.postJson(link, dodJson)
         }
-        
+
         showSingleNewRow();
     });
 
@@ -102,7 +141,24 @@ KB.on('dom.ready', function () {
         dodJson['task_id'] = e.target.getAttribute("taskid");
 
         const link = '?controller=DefinitionOfDoneController&action=save&plugin=DefinitionOfDone';
-        KB.http.postJson(link, dodJson);
+        KB.http.postJson(link, dodJson).success(function (newtable) {
+            var rows = $(".dod-table").find("tbody").find("tr");
+            rows.remove();
+            $(".dod-table").find("tbody").append($(newtable));
+        });
+    });
+
+    $(document).on('click', '.dodStateToggle', function (e) {
+        e.preventDefault();
+
+        let el = $(this);
+        let url = el.attr('href');
+
+        let icon = el.find('i');
+        icon.toggleClass("fa-square-o");
+        icon.toggleClass("fa-check-square-o");
+
+        KB.http.get(url);
     });
 
     $(document).on('click', '.dodSelect', function (e) {
@@ -111,6 +167,31 @@ KB.on('dom.ready', function () {
         this.classList.toggle("fa-check-square-o");
 
         this.closest(".dod").classList.toggle("dod-selected");
+    });
+
+    $(document).on('click', '.dodExport', function (e) {
+        e.preventDefault();
+
+        var el = $(this);
+        var url = el.attr('href');
+
+        KB.http.get(url).success(function (data) {
+            let downloadObject = document.createElement("a");
+            downloadObject.download = "dod_" + Date.now() + ".json";
+            downloadObject.href = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)]));
+            downloadObject.click();
+        });
+    });
+
+    $(document).on('click', '.dodImport', async function (e) {
+        e.preventDefault();
+
+        var el = $(this);
+        var url = el.attr('href');
+        const json = JSON.parse(await getJsonUpload());
+
+        KB.http.postJson(url, json).success(function (data) {
+        });
     });
 
     function dodsavePosition(dodid, position) {
@@ -150,11 +231,20 @@ KB.on('dom.ready', function () {
             start: function (event, ui) {
                 ui.item.addClass("draggable-item-selected");
             }
-        }).disableSelection();
+        });
     }
 
-    KB.on('dom.ready', dodbootstrap);
-    KB.on('dod.reloaded', dodbootstrap);
+    function dodReorder() {
+        let main = $(".dodmain");
+        let li = main.next("li");
+        if (li.length != 0)
+        {
+            main.insertAfter(li);
+        }
+    }
+
+    dodbootstrap();
+    dodReorder();
 });
 
 function resizeEvent(event) {

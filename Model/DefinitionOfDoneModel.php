@@ -24,7 +24,7 @@ class DefinitionOfDoneModel extends Base
         return $this->table()->eq('id', $Id)->findOne();
     }
 
-    public function getAllById($taskId)
+    public function getAll($taskId)
     {
         return $this->table()->eq('task_id', $taskId)->orderBy("position")->findAll();
     }
@@ -34,6 +34,19 @@ class DefinitionOfDoneModel extends Base
         $this->db->startTransaction();
 
         foreach ($entries as $entry) {
+            $this->save($entry);
+        }
+
+        $this->db->closeTransaction();
+    }
+
+    public function copyAll($source, $target)
+    {
+        $this->db->startTransaction();
+        $entries = $this->getAll($source);
+
+        foreach ($entries as $entry) {
+            $entry['task_id'] = $target;
             $this->save($entry);
         }
 

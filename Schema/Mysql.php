@@ -10,7 +10,7 @@ function version_1(PDO $pdo)
 {
     $pdo->exec("
     CREATE TABLE definition_of_done (
-        id INT NOT NULL,
+        id INT NOT NULL AUTO_INCREMENT,
         `title` TEXT,
         status INT,
         task_id INT,
