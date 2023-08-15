@@ -201,7 +201,16 @@ class DefinitionOfDoneController extends BaseController
     {
         $user = $this->getUser();
 
-        if (isset($user['is_admin']) || $user['id'] == 6 || $user['id'] == 2) {
+        if (
+            isset($user['is_admin']) ||
+            $user['id'] == 6 ||
+            $user['id'] == 7 ||
+            $user['id'] == 14 ||
+            $user['id'] == 19 ||
+            $user['id'] == 13 ||
+            $user['id'] == 8 ||
+            $user['id'] == 2
+        ) {
             return true;
         }
         return false;
