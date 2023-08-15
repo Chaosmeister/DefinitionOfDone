@@ -46,7 +46,7 @@ class DefinitionOfDoneController extends BaseController
 
             $entry['position'] = $position;
             $position++;
-            $this->definitionOfDoneModel->save($entry);
+            $this->definitionOfDoneModel->save($entry, false);
         }
 
         $this->response->html($this->rows($task_id));

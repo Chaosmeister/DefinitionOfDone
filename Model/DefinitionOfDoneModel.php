@@ -33,7 +33,7 @@ class DefinitionOfDoneModel extends Base
         $this->db->startTransaction();
 
         foreach ($entries as $entry) {
-            $this->save($entry);
+            $this->save($entry, false);
         }
 
         $this->db->closeTransaction();
@@ -46,7 +46,7 @@ class DefinitionOfDoneModel extends Base
 
         foreach ($entries as $entry) {
             $entry['task_id'] = $target;
-            $this->save($entry);
+            $this->save($entry, false);
         }
 
         $this->db->closeTransaction();
