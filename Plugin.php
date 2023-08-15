@@ -8,6 +8,11 @@ class Plugin extends Base
 {
     public function initialize()
     {
+        $this->template->setTemplateOverride('event/DefinitionOfDone_create', 'DefinitionOfDone:Event\create');
+        $this->template->setTemplateOverride('event/DefinitionOfDone_delete', 'DefinitionOfDone:Event\delete');
+        $this->template->setTemplateOverride('event/DefinitionOfDone_toggle', 'DefinitionOfDone:Event\toggle');
+        $this->template->setTemplateOverride('event/DefinitionOfDone_update', 'DefinitionOfDone:Event\update');
+
         $this->template->hook->attach("template:task:show:before-subtasks", "DefinitionOfDone:DefinitionOfDone/show");
 
         $this->hook->on('template:layout:js', array('template' => 'plugins/DefinitionOfDone/Assets/js/functions.js'));

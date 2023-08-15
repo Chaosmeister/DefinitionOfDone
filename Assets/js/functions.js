@@ -118,6 +118,7 @@ KB.on('dom.ready', function () {
 
         var dodJson = {};
         dodJson["ids"] = [];
+        dodJson['task_id'] = e.target.getAttribute("taskid");
 
         for (const selecteddod of [...document.getElementsByClassName('dod-selected')]) {
             dodJson["ids"].push(selecteddod.getAttribute("dodid"));
@@ -237,8 +238,7 @@ KB.on('dom.ready', function () {
     function dodReorder() {
         let main = $(".dodmain");
         let li = main.next("li");
-        if (li.length != 0)
-        {
+        if (li.length != 0) {
             main.insertAfter(li);
         }
     }

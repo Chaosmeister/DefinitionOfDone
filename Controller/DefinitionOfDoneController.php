@@ -10,7 +10,7 @@ function isEmpty($variable)
     if ($empty) {
         return $variable == "";
     }
-    return  false;
+    return false;
 }
 
 class DefinitionOfDoneController extends BaseController
@@ -100,7 +100,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td class="dodOptions">';
         $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></i>';
         $html .= '<i class="fa fa-fw fa-square-o button dodSelect"></i>';
-        $html .= '<i class="fa fa-fw fa-trash button dodTrash"></i>';
+        $html .= '<i class="fa fa-fw fa-trash button dodTrash" taskid="' . $task_id . '"></i>';
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
         $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit');
         $html .= '</td>';
@@ -222,7 +222,7 @@ class DefinitionOfDoneController extends BaseController
 
         $entry['user_id'] = $user['id'];
 
-        $this->definitionOfDoneModel->save($entry);
+        $this->definitionOfDoneModel->save($entry, true);
     }
 
     public function export()
