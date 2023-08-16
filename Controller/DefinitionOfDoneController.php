@@ -165,9 +165,6 @@ class DefinitionOfDoneController extends BaseController
             $html .= '>';
         }
         $html .= '</td>';
-        $html .= '<td class="dodAssignee">';
-        $html .= '</td>';
-        $html .= '</td>';
         $html .= '<td class="doddescription">';
         $html .= '<textarea class="dodInput newdodDescription">';
         if (isset($dod["text"])) {
