@@ -98,11 +98,11 @@ class DefinitionOfDoneController extends BaseController
     {
         $html = '<tr class="dod" dodId="' . $dod['id'] . '">';
         $html .= '<td class="dodOptions">';
-        $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></i>';
-        $html .= '<i class="fa fa-fw fa-square-o button dodSelect"></i>';
-        $html .= '<i class="fa fa-fw fa-trash button dodTrash" taskid="' . $task_id . '"></i>';
-        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
-        $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit');
+        $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></i>';
+        $html .= '<i class="fa fa-fw fa-square-o button dodSelect" title="' . t('Select row for deletion') . '"></i>';
+        $html .= '<i class="fa fa-fw fa-trash button dodTrash" taskid="' . $task_id . '" title="' . t('Delete selected rows') . '"></i>';
+        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', t('Add row'));
+        $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit', t('Edit row'));
         $html .= '</td>';
 
         if ($dod['text'] == "=====") {
@@ -115,7 +115,7 @@ class DefinitionOfDoneController extends BaseController
             if ($dod['status'] != 0) {
                 $status = 'check-' . $status;
             }
-            $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle');
+            $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle', t('Toggle state'));
             $html .= '</td>';
             $html .= '<td class="dodTitle">';
             $html .= $dod['title'];
@@ -154,12 +154,12 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<i class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></i>';
 
         if (isset($dod)) {
-            $html .= '<i class="fa fa-fw fa-times button editdodTrash"></i>';
+            $html .= '<i class="fa fa-fw fa-times button editdodTrash" title="' . t('Close row') . '"></i>';
         } else {
-            $html .= '<i class="fa fa-fw fa-times button newdodTrash"></i>';
+            $html .= '<i class="fa fa-fw fa-times button newdodTrash" title="' . t('Close row') . '"></i>';
         }
 
-        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
+        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', 'New row');
         $html .= '</td>';
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
