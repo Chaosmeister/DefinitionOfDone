@@ -18,13 +18,14 @@
             <strong>Text: </strong> <?= $text ?>
         <?php endif ?>
     </p>
-    <p>
-        <strong>Status: </strong>
-        
-        <?php if ($status == null) : ?>
-            not finished
-        <?php else : ?>
-            finished
-        <?php endif ?>
-    </p>
+    <?php if (isset($status)) : ?>
+        <p>
+            <strong>Status: </strong>
+            <?php if ($status == null) : ?>
+                not finished
+            <?php else : ?>
+                finished
+            <?php endif ?>
+        </p>
+    <?php endif ?>
 </div>
