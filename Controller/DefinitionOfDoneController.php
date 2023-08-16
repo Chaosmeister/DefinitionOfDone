@@ -159,7 +159,7 @@ class DefinitionOfDoneController extends BaseController
             $html .= '<i class="fa fa-fw fa-times button newdodTrash" title="' . t('Close row') . '"></i>';
         }
 
-        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', 'New row');
+        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', 'Add row');
         $html .= '</td>';
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
