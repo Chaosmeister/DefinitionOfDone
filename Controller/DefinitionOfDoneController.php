@@ -154,9 +154,9 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<i class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></i>';
 
         if (isset($dod)) {
-            $html .= '<i class="fa fa-fw fa-trash button editdodTrash"></i>';
+            $html .= '<i class="fa fa-fw fa-times button editdodTrash"></i>';
         } else {
-            $html .= '<i class="fa fa-fw fa-trash button newdodTrash"></i>';
+            $html .= '<i class="fa fa-fw fa-times button newdodTrash"></i>';
         }
 
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
