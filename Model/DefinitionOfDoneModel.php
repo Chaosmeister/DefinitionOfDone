@@ -57,6 +57,7 @@ class DefinitionOfDoneModel extends Base
         $projectId = $this->taskFinderModel->getProjectId($entry['task_id']);
         $userId = $this->userSession->getId();
 
+        // update an existing entry
         if (isset($entry['id'])) {
             $dbEntry = $this->table()->eq('id', $entry['id']);
             if ($dbEntry->exists()) {
@@ -74,7 +75,10 @@ class DefinitionOfDoneModel extends Base
                             'status' => $entry['status']
                         ))
                     ));
-                } else {
+                } else if (
+                    isset($entry['title']) &&
+                    isset($entry['text'])
+                ) {
                     $this->CreateEvent(array(
                         'event_name' => 'DefinitionOfDone.update',
                         'date_creation' => time(),
@@ -83,8 +87,7 @@ class DefinitionOfDoneModel extends Base
                         'project_id' => $projectId,
                         'data' => json_encode(array(
                             'title' => $entry['title'],
-                            'text' => $entry['text'],
-                            'status' => $entry['status']
+                            'text' => $entry['text']
                         ))
                     ));
                 }
@@ -92,6 +95,7 @@ class DefinitionOfDoneModel extends Base
             }
         }
 
+        // create a new entry
         $this->table()->insert($entry);
 
         $this->CreateEvent(array(
