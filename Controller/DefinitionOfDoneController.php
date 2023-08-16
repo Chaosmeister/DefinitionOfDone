@@ -106,9 +106,9 @@ class DefinitionOfDoneController extends BaseController
         $html .= '</td>';
 
         if ($dod['text'] == "=====") {
-            $html .= '<td colspan=5>';
+            $html .= '<td colspan=5><h2>';
             $html .= $dod['title'];
-            $html .= '</td>';
+            $html .= '</h2></td>';
         } else {
             $html .= '<td class="dodStatus">';
             $status = 'square-o';
