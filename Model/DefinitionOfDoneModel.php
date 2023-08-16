@@ -52,7 +52,7 @@ class DefinitionOfDoneModel extends Base
         $this->db->closeTransaction();
     }
 
-    public function save($entry, $toggle)
+    public function save($entry, $toggle = false)
     {
         $projectId = $this->taskFinderModel->getProjectId($entry['task_id']);
         $userId = $this->userSession->getId();
