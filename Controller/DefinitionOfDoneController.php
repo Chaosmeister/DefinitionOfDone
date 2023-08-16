@@ -120,12 +120,6 @@ class DefinitionOfDoneController extends BaseController
             $html .= '<td class="dodTitle">';
             $html .= $dod['title'];
             $html .= '</td>';
-            $html .= '<td class="dodAssignee">';
-            if ($dod['user_id']) {
-                $user = $this->userModel->getById($dod['user_id']);
-                $html .= $user['name'];
-            }
-            $html .= '</td>';
             $html .= '<td class="dodText">';
             $html .= $this->helper->text->markdown($dod['text']);
             $html .= '</td>';
