@@ -96,7 +96,12 @@ class DefinitionOfDoneController extends BaseController
 
     private function row($dod, $task_id)
     {
-        $html = '<tr class="dod" dodId="' . $dod['id'] . '">';
+        $style = '';
+        if ($dod['text'] == "=====") { // separator
+            $style = 'style="background-color: rgb(0,0,0,0.1);"';
+        }
+
+        $html = '<tr class="dod" dodId="' . $dod['id'] . '" ' . $style . '>';
         $html .= '<td class="dodOptions">';
         $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></i>';
         $html .= '<i class="fa fa-fw fa-square-o button dodSelect" title="' . t('Select row for deletion') . '"></i>';
@@ -105,11 +110,11 @@ class DefinitionOfDoneController extends BaseController
         $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit', t('Edit row'));
         $html .= '</td>';
 
-        if ($dod['text'] == "=====") {
-            $html .= '<td colspan=5><h2>';
+        if ($dod['text'] == "=====") { // separator
+            $html .= '<td colspan=5><h1 style="padding-left: 20px">';
             $html .= $dod['title'];
-            $html .= '</h2></td>';
-        } else {
+            $html .= '</h1></td>';
+        } else { // normal line
             $html .= '<td class="dodStatus">';
             $status = 'square-o';
             if ($dod['status'] != 0) {
