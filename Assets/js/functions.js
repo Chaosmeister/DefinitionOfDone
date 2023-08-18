@@ -75,7 +75,7 @@ KB.on('dom.ready', function () {
         var url = el.attr('href');
 
         KB.http.get(url).success(function (data) {
-            $(data).insertBefore(el.closest("tr"));
+            $(data).insertAfter(el.closest("tr"));
         });
 
         hideSingleNewRow();
