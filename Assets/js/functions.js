@@ -21,20 +21,27 @@ function serializedodtable() {
     var rows = $(".dod-table").find("tbody").find("tr");
 
     rows.each(function (index) {
-        if ($(this).is(":visible")) {
+        if ($(this).hasClass("editdod")) {
             var row = {};
-            if ($(this).hasClass("editdod")) {
-                row["id"] = $(this).attr("dodid");
-                row["title"] = $(this).find(".newdodTitle").val();
-                row["text"] = $(this).find(".newdodDescription").val();
-            }
-            else if ($(this).hasClass("dod")) {
-                row["id"] = $(this).attr("dodid");
-            }
-            else if ($(this).hasClass("newdod")) {
-                row["title"] = $(this).find(".newdodTitle").val();
-                row["text"] = $(this).find(".newdodDescription").val();
-            }
+
+            row["id"] = $(this).attr("dodid");
+            row["title"] = $(this).find(".newdodTitle").val();
+            row["text"] = $(this).find(".newdodDescription").val();
+
+            dod.push(row);
+        }
+        else if ($(this).hasClass("dod")) {
+            var row = {};
+
+            row["id"] = $(this).attr("dodid");
+
+            dod.push(row);
+        }
+        else if ($(this).hasClass("newdod")) {
+            var row = {};
+
+            row["title"] = $(this).find(".newdodTitle").val();
+            row["text"] = $(this).find(".newdodDescription").val();
 
             dod.push(row);
         }
