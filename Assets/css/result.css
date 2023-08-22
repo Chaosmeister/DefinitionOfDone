@@ -18,7 +18,12 @@ textarea.dodInput {
     color: var(--color-primary)
 }
 
-.dodText {
+.dod-title {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.dod-text {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
@@ -40,6 +45,6 @@ textarea.dodInput {
     vertical-align: middle;
 }
 
-.dod>td:last-child {
+.dod>td:last-child:not(:empty)  {
     width: 50%;
 }

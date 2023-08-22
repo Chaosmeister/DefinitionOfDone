@@ -126,10 +126,10 @@ class DefinitionOfDoneController extends BaseController
             }
             $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle', t('Toggle state'));
             $html .= '</td>';
-            $html .= '<td class="dodTitle">';
+            $html .= '<td class="dod-title">';
             $html .= $dod['title'];
             $html .= '</td>';
-            $html .= '<td class="dodText">';
+            $html .= '<td class="dod-text">';
             $html .= $this->helper->text->markdown($dod['text']);
             $html .= '</td>';
             $html .= '</tr>';
@@ -167,7 +167,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '</td>';
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
-        $html .= '<td class="dodTitle">';
+        $html .= '<td class="dod-title">';
         $html .= '<input class="dodInput newdodTitle"';
         if (isset($dod["title"])) {
             $html .= ' value="' . $dod["title"] . '">';
