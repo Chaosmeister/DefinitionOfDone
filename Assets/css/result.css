@@ -19,11 +19,27 @@ textarea.dodInput {
 }
 
 .dodText {
-    white-space: pre-wrap
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
 }
 
-.dod > td {
+.dod-table {
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.dod-options {
+    display: flex;
+    align-items: baseline;
+}
+
+.dod>td {
     padding-top: 0.1em;
     padding-bottom: 0.1em;
     vertical-align: middle;
+}
+
+.dod>td:last-child {
+    width: 100%;
 }
