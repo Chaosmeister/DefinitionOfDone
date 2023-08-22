@@ -206,12 +206,22 @@ KB.on('dom.ready', function () {
         });
     });
 
-    $(document).on('click', '.dod-seperator-button', function(e) {
+    $(document).on('click', '.dod-separator-button', function (e) {
         e.preventDefault();
 
         var el = $(this);
-        el.parent("dod-separator").nextUntil(".dod-separator, newdodrow").hide();
-        el.parent("dod-separator").nextUntil(".dod-separator, newdodrow").show();
+
+        var icon = el.find(".dod-separator-icon");
+        icon.toggleClass("fa-compress");
+        icon.toggleClass("fa-expand");
+
+        var parent = el.parent(".dod-separator");
+        if (icon.hasClass("fa-expand")) {
+            parent.nextUntil(".dod-separator, .newdodrow").hide();
+        }
+        else {
+            parent.nextUntil(".dod-separator, .newdodrow").show();
+        }
     });
 
     function dodsavePosition(dodid, position) {

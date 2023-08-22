@@ -96,13 +96,14 @@ class DefinitionOfDoneController extends BaseController
 
     private function row($dod, $task_id)
     {
-        $ext = '';
+        $style = '';
+        $class = '';
         if ($dod['text'] == "=====") { // separator
-            $ext = ' style="background-color: rgb(0,0,0,0.1);"';
-            $ext .= ' class="dod-separator"';
+            $style = ' style="background-color: rgb(0,0,0,0.1);"';
+            $class = ' dod-separator';
         }
 
-        $html = '<tr class="dod" dodId="' . $dod['id'] . '"' . $ext . '>';
+        $html = '<tr class="dod' . $class . '" dodId="' . $dod['id'] . '"' . $style . '>';
         $html .= '<td class="dodOptions">';
         $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></i>';
         $html .= '<i class="fa fa-fw fa-square-o button dodSelect" title="' . t('Select row for deletion') . '"></i>';
@@ -112,9 +113,9 @@ class DefinitionOfDoneController extends BaseController
         $html .= '</td>';
 
         if ($dod['text'] == "=====") { // separator
-            $html .= '<td colspan=5 class="button dod-seperator-button"><h1 style="padding-left: 20px">';
+            $html .= '<td colspan=5 class="button dod-separator-button"><div style="display: flex; align-items: center;"><div class="fa fa-fw fa-compress dod-separator-icon "></div><h1 style="padding-left: 20px">';
             $html .= $dod['title'];
-            $html .= '</h1></td>';
+            $html .= '</h1></div></td>';
         } else { // normal line
             $html .= '<td class="dodStatus">';
             $status = 'square-o';
