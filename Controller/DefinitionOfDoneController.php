@@ -10,7 +10,7 @@ function isEmpty($variable)
     if ($empty) {
         return $variable == "";
     }
-    return  false;
+    return false;
 }
 
 class DefinitionOfDoneController extends BaseController
@@ -46,7 +46,7 @@ class DefinitionOfDoneController extends BaseController
 
             $entry['position'] = $position;
             $position++;
-            $this->definitionOfDoneModel->save($entry);
+            $this->definitionOfDoneModel->save($entry, false);
         }
 
         $this->response->html($this->rows($task_id));
@@ -96,35 +96,34 @@ class DefinitionOfDoneController extends BaseController
 
     private function row($dod, $task_id)
     {
-        $html = '<tr class="dod" dodId="' . $dod['id'] . '">';
+        $style = '';
+        if ($dod['text'] == "=====") { // separator
+            $style = 'style="background-color: rgb(0,0,0,0.1);"';
+        }
+
+        $html = '<tr class="dod" dodId="' . $dod['id'] . '" ' . $style . '>';
         $html .= '<td class="dodOptions">';
-        $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></i>';
-        $html .= '<i class="fa fa-fw fa-square-o button dodSelect"></i>';
-        $html .= '<i class="fa fa-fw fa-trash button dodTrash"></i>';
-        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
-        $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit');
+        $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></i>';
+        $html .= '<i class="fa fa-fw fa-square-o button dodSelect" title="' . t('Select row for deletion') . '"></i>';
+        $html .= '<i class="fa fa-fw fa-trash button dodTrash" taskid="' . $task_id . '" title="' . t('Delete selected rows') . '"></i>';
+        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', t('Add row'));
+        $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit', t('Edit row'));
         $html .= '</td>';
 
-        if ($dod['text'] == "=====") {
-            $html .= '<td colspan=5>';
+        if ($dod['text'] == "=====") { // separator
+            $html .= '<td colspan=5><h1 style="padding-left: 20px">';
             $html .= $dod['title'];
-            $html .= '</td>';
-        } else {
+            $html .= '</h1></td>';
+        } else { // normal line
             $html .= '<td class="dodStatus">';
             $status = 'square-o';
             if ($dod['status'] != 0) {
                 $status = 'check-' . $status;
             }
-            $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle');
+            $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle', t('Toggle state'));
             $html .= '</td>';
             $html .= '<td class="dodTitle">';
             $html .= $dod['title'];
-            $html .= '</td>';
-            $html .= '<td class="dodAssignee">';
-            if ($dod['user_id']) {
-                $user = $this->userModel->getById($dod['user_id']);
-                $html .= $user['name'];
-            }
             $html .= '</td>';
             $html .= '<td class="dodText">';
             $html .= $this->helper->text->markdown($dod['text']);
@@ -154,12 +153,12 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<i class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></i>';
 
         if (isset($dod)) {
-            $html .= '<i class="fa fa-fw fa-trash button editdodTrash"></i>';
+            $html .= '<i class="fa fa-fw fa-times button editdodTrash" title="' . t('Close row') . '"></i>';
         } else {
-            $html .= '<i class="fa fa-fw fa-trash button newdodTrash"></i>';
+            $html .= '<i class="fa fa-fw fa-times button newdodTrash" title="' . t('Close row') . '"></i>';
         }
 
-        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew');
+        $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', 'Add row');
         $html .= '</td>';
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
@@ -170,9 +169,6 @@ class DefinitionOfDoneController extends BaseController
         } else {
             $html .= '>';
         }
-        $html .= '</td>';
-        $html .= '<td class="dodAssignee">';
-        $html .= '</td>';
         $html .= '</td>';
         $html .= '<td class="doddescription">';
         $html .= '<textarea class="dodInput newdodDescription">';
@@ -197,16 +193,6 @@ class DefinitionOfDoneController extends BaseController
         $this->response->status(200);
     }
 
-    public function access()
-    {
-        $user = $this->getUser();
-
-        if (isset($user['is_admin']) || $user['id'] == 6 || $user['id'] == 2) {
-            return true;
-        }
-        return false;
-    }
-
     public function toggle()
     {
         $dod_id = $this->request->getIntegerParam('dod_id');
@@ -222,7 +208,7 @@ class DefinitionOfDoneController extends BaseController
 
         $entry['user_id'] = $user['id'];
 
-        $this->definitionOfDoneModel->save($entry);
+        $this->definitionOfDoneModel->save($entry, true);
     }
 
     public function export()

@@ -75,7 +75,7 @@ KB.on('dom.ready', function () {
         var url = el.attr('href');
 
         KB.http.get(url).success(function (data) {
-            $(data).insertBefore(el.closest("tr"));
+            $(data).insertAfter(el.closest("tr"));
         });
 
         hideSingleNewRow();
@@ -118,10 +118,15 @@ KB.on('dom.ready', function () {
 
         var dodJson = {};
         dodJson["ids"] = [];
+        dodJson['task_id'] = e.target.getAttribute("taskid");
+        let selectedEntries = [...document.getElementsByClassName('dod-selected')];
+        if (selectedEntries.length == 0) {
+            alert("No entry selected\nUse the checkbox to select one or multiple entries");
+            return;
+        }
 
-        for (const selecteddod of [...document.getElementsByClassName('dod-selected')]) {
+        for (const selecteddod of selectedEntries) {
             dodJson["ids"].push(selecteddod.getAttribute("dodid"));
-
             selecteddod.remove();
         }
 
@@ -237,8 +242,7 @@ KB.on('dom.ready', function () {
     function dodReorder() {
         let main = $(".dodmain");
         let li = main.next("li");
-        if (li.length != 0)
-        {
+        if (li.length != 0) {
             main.insertAfter(li);
         }
     }
