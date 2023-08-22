@@ -206,6 +206,14 @@ KB.on('dom.ready', function () {
         });
     });
 
+    $(document).on('click', '.dod-seperator-button', function(e) {
+        e.preventDefault();
+
+        var el = $(this);
+        el.parent("dod-separator").nextUntil(".dod-separator, newdodrow").hide();
+        el.parent("dod-separator").nextUntil(".dod-separator, newdodrow").show();
+    });
+
     function dodsavePosition(dodid, position) {
         var url = $(".dod-table").data("save-position-url");
 

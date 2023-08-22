@@ -96,12 +96,13 @@ class DefinitionOfDoneController extends BaseController
 
     private function row($dod, $task_id)
     {
-        $style = '';
+        $ext = '';
         if ($dod['text'] == "=====") { // separator
-            $style = 'style="background-color: rgb(0,0,0,0.1);"';
+            $ext = ' style="background-color: rgb(0,0,0,0.1);"';
+            $ext .= ' class="dod-separator"';
         }
 
-        $html = '<tr class="dod" dodId="' . $dod['id'] . '" ' . $style . '>';
+        $html = '<tr class="dod" dodId="' . $dod['id'] . '"' . $ext . '>';
         $html .= '<td class="dodOptions">';
         $html .= '<i class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></i>';
         $html .= '<i class="fa fa-fw fa-square-o button dodSelect" title="' . t('Select row for deletion') . '"></i>';
@@ -111,7 +112,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '</td>';
 
         if ($dod['text'] == "=====") { // separator
-            $html .= '<td colspan=5><h1 style="padding-left: 20px">';
+            $html .= '<td colspan=5 class="button dod-seperator-button"><h1 style="padding-left: 20px">';
             $html .= $dod['title'];
             $html .= '</h1></td>';
         } else { // normal line
