@@ -129,7 +129,7 @@ class DefinitionOfDoneController extends BaseController
             $html .= '<td class="dodTitle">';
             $html .= $dod['title'];
             $html .= '</td>';
-            $html .= '<td class="dodText column-100">';
+            $html .= '<td class="dodText">';
             $html .= $this->helper->text->markdown($dod['text']);
             $html .= '</td>';
             $html .= '</tr>';
