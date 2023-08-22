@@ -23,9 +23,17 @@ textarea.dodInput {
     overflow-wrap: anywhere;
 }
 
+.dod-separator-button {
+    width: 100%;
+}
+
 .dod-text {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+}
+
+.dod-text:not(:empty)  {
+    width: 50%;
 }
 
 .dod-table {
@@ -43,8 +51,4 @@ textarea.dodInput {
     padding-top: 0.1em;
     padding-bottom: 0.1em;
     vertical-align: middle;
-}
-
-.dod>td:last-child:not(:empty)  {
-    width: 50%;
 }
