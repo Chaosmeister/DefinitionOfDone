@@ -148,7 +148,7 @@ class DefinitionOfDoneController extends BaseController
             $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle', t('Toggle state'));
             $html .= '</td>';
             $html .= '<td class="dod-title">';
-            $html .= $dod['title'];
+            $html .= $this->helper->text->markdown($dod['title']);
             $html .= '</td>';
             $html .= '<td class="dod-text">';
             $html .= $this->helper->text->markdown($dod['text']);
