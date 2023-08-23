@@ -1,6 +1,6 @@
 <details class="accordion-section dodmain" open>
     <summary class="accordion-title"><?= t('Definition Of Done') ?>
-        <?= $this->helper->url->icon('upload', '', 'DefinitionOfDoneController', 'save', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodImport') ?>
+        <?= $this->helper->url->icon('upload', '', 'DefinitionOfDoneController', 'import', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodImport') ?>
         <?= $this->helper->url->icon('download', '', 'DefinitionOfDoneController', 'export', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodExport') ?>
     </summary>
     <div class="accordion-content">

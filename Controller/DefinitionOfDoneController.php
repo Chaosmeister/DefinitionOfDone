@@ -15,41 +15,62 @@ function isEmpty($variable)
 
 class DefinitionOfDoneController extends BaseController
 {
-    public function save()
+    public function import()
     {
         $values = $this->request->getJson();
-        $user = $this->getUser();
 
-        $position = 1;
         if (empty($values)) {
             $this->response->status(422);
         }
 
         $task_id = $this->request->getIntegerParam('task_id');
-        if (!empty($values['task_id'])) {
+        if ($task_id != 0) {
 
-            $task_id = $values['task_id'];
+            $values['task_id'] = $task_id;
         }
+
+        $this->definitionOfDoneModel->clear($task_id);
+        $this->store($values);
+
+        $this->response->html($this->rows($task_id));
+    }
+
+    public function save()
+    {
+        $values = $this->request->getJson();
+
+        if (empty($values)) {
+            $this->response->status(422);
+        }
+
+        $task_id = $this->request->getIntegerParam('task_id');
+        if ($task_id != 0) {
+
+            $values['task_id'] = $task_id;
+        }
+
+        $this->store($values);
+
+        $this->response->html($this->rows($values['task_id']));
+    }
+
+    private function store($values)
+    {
+        $position = 1;
+        $task_id = $values['task_id'];
 
         foreach ($values["entries"] as $entry) {
 
             if (sizeof($entry) > 1 && isEmpty($entry['title'])) {
-                // invalid entry, skip
-                continue;
+                continue; // no title => invalid entry, skip
             }
 
             $entry["task_id"] = $task_id;
-
-            if (isset($entry['title']) || isset($entry['text'])) {
-                $entry['user_id'] = $user['id'];
-            }
-
             $entry['position'] = $position;
             $position++;
+
             $this->definitionOfDoneModel->save($entry, false);
         }
-
-        $this->response->html($this->rows($task_id));
     }
 
     public function edit()
@@ -168,12 +189,11 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td class="dodStatus">';
         $html .= '</td>';
         $html .= '<td class="dod-title">';
-        $html .= '<input class="dodInput newdodTitle"';
-        if (isset($dod["title"])) {
-            $html .= ' value="' . $dod["title"] . '">';
-        } else {
-            $html .= '>';
+        $html .= '<textarea class="dodInput newdodTitle">';
+        if (isset($dod['title'])) {
+            $html .= $dod['title'];
         }
+        $html .= '</textarea>';
         $html .= '</div>';
         $html .= '</td>';
         $html .= '<td class="doddescription">';
@@ -202,7 +222,6 @@ class DefinitionOfDoneController extends BaseController
     public function toggle()
     {
         $dod_id = $this->request->getIntegerParam('dod_id');
-        $user = $this->getUser();
 
         $entry = $this->definitionOfDoneModel->getById($dod_id);
 
@@ -211,8 +230,6 @@ class DefinitionOfDoneController extends BaseController
         } else {
             $entry['status'] = 0;
         }
-
-        $entry['user_id'] = $user['id'];
 
         $this->definitionOfDoneModel->save($entry, true);
     }

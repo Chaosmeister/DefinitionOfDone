@@ -18,9 +18,9 @@ class DefinitionOfDoneModel extends Base
         $table->insert($event);
     }
 
-    public function getById($Id)
+    public function getById($id)
     {
-        return $this->table()->eq('id', $Id)->findOne();
+        return $this->table()->eq('id', $id)->findOne();
     }
 
     public function getAll($taskId)
@@ -54,8 +54,8 @@ class DefinitionOfDoneModel extends Base
 
     public function save($entry, $toggle = false)
     {
-        $projectId = $this->taskFinderModel->getProjectId($entry['task_id']);
-        $userId = $this->userSession->getId();
+        $project_id = $this->taskFinderModel->getProjectId($entry['task_id']);
+        $user_id = $this->userSession->getId();
 
         // update an existing entry
         if (isset($entry['id'])) {
@@ -67,9 +67,9 @@ class DefinitionOfDoneModel extends Base
                     $this->CreateEvent(array(
                         'event_name' => 'DefinitionOfDone.toggle',
                         'date_creation' => time(),
-                        'creator_id' => $userId,
+                        'creator_id' => $user_id,
                         'task_id' => $entry['task_id'],
-                        'project_id' => $projectId,
+                        'project_id' => $project_id,
                         'data' => json_encode(array(
                             'title' => $entry['title'],
                             'status' => $entry['status']
@@ -82,9 +82,9 @@ class DefinitionOfDoneModel extends Base
                     $this->CreateEvent(array(
                         'event_name' => 'DefinitionOfDone.update',
                         'date_creation' => time(),
-                        'creator_id' => $userId,
+                        'creator_id' => $user_id,
                         'task_id' => $entry['task_id'],
-                        'project_id' => $projectId,
+                        'project_id' => $project_id,
                         'data' => json_encode(array(
                             'title' => $entry['title'],
                             'text' => $entry['text']
@@ -101,9 +101,9 @@ class DefinitionOfDoneModel extends Base
         $this->CreateEvent(array(
             'event_name' => 'DefinitionOfDone.create',
             'date_creation' => time(),
-            'creator_id' => $userId,
+            'creator_id' => $user_id,
             'task_id' => $entry['task_id'],
-            'project_id' => $projectId,
+            'project_id' => $project_id,
             'data' => json_encode(array(
                 'title' => $entry['title'],
                 'text' => $entry['text']
@@ -117,6 +117,11 @@ class DefinitionOfDoneModel extends Base
         if (isset($text)) {
             $this->save($destinationId, $text);
         }
+    }
+
+    public function clear($task_id)
+    {
+        $this->table()->eq('task_id', $task_id)->remove();
     }
 
     public function delete($entries)
@@ -149,11 +154,11 @@ class DefinitionOfDoneModel extends Base
         $this->db->closeTransaction();
 
         $project_Id = $this->taskFinderModel->getProjectId($task_id);
-        $userId = $this->userSession->getId();
+        $user_id = $this->userSession->getId();
         $this->CreateEvent(array(
             'event_name' => 'DefinitionOfDone.delete',
             'date_creation' => time(),
-            'creator_id' => $userId,
+            'creator_id' => $user_id,
             'task_id' => $task_id,
             'project_id' => $project_Id,
             'data' => json_encode(array('deleted_entries' => $deleted_Entries))

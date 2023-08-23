@@ -145,6 +145,12 @@ KB.on('dom.ready', function () {
         showSingleNewRow();
     });
 
+    function ReloadTable(newtable) {
+        var rows = $(".dod-table").find("tbody").find("tr");
+        rows.remove();
+        $(".dod-table").find("tbody").append($(newtable));
+    };
+
     $(document).on('click', '.dodSave', function (e) {
         e.preventDefault();
 
@@ -153,11 +159,7 @@ KB.on('dom.ready', function () {
         dodJson['task_id'] = e.target.getAttribute("taskid");
 
         const link = '?controller=DefinitionOfDoneController&action=save&plugin=DefinitionOfDone';
-        KB.http.postJson(link, dodJson).success(function (newtable) {
-            var rows = $(".dod-table").find("tbody").find("tr");
-            rows.remove();
-            $(".dod-table").find("tbody").append($(newtable));
-        });
+        KB.http.postJson(link, dodJson).success(ReloadTable);
     });
 
     $(document).on('click', '.dodStateToggle', function (e) {
@@ -202,8 +204,7 @@ KB.on('dom.ready', function () {
         var url = el.attr('href');
         const json = JSON.parse(await getJsonUpload());
 
-        KB.http.postJson(url, json).success(function (data) {
-        });
+        KB.http.postJson(url, json).success(ReloadTable);
     });
 
     $(document).on('click', '.dod-separator-button', function (e) {
