@@ -7,7 +7,7 @@ function hideSingleNewRow() {
 
 function showSingleNewRow() {
     if ($(".newdodrow").is(":hidden")) {
-        var rows = $(".dod-table").find(".newdod, .dod");
+        var rows = $(".dod-table").find(".dod-new, .dod");
 
         if (rows.length == 0) {
             $(".newdodrow").show();
@@ -24,7 +24,7 @@ function serializedodtable() {
         if ($(this).hasClass("editdod")) {
             var row = {};
 
-            row["id"] = $(this).attr("dodid");
+            row["id"] = $(this).attr("dod-id");
             row["title"] = $(this).find(".newdodTitle").val();
             row["text"] = $(this).find(".newdodDescription").val();
 
@@ -33,11 +33,11 @@ function serializedodtable() {
         else if ($(this).hasClass("dod")) {
             var row = {};
 
-            row["id"] = $(this).attr("dodid");
+            row["id"] = $(this).attr("dod-id");
 
             dod.push(row);
         }
-        else if ($(this).hasClass("newdod")) {
+        else if ($(this).hasClass("dod-new")) {
             var row = {};
 
             row["title"] = $(this).find(".newdodTitle").val();
@@ -95,7 +95,7 @@ KB.on('dom.ready', function () {
 
     $(document).on('click', '.newdodTrash', function (e) {
         e.preventDefault();
-        this.closest(".newdod").remove();
+        this.closest(".dod-new").remove();
         showSingleNewRow();
     });
 
@@ -137,7 +137,7 @@ KB.on('dom.ready', function () {
         }
 
         for (const selecteddod of selectedEntries) {
-            dodJson["ids"].push(selecteddod.getAttribute("dodid"));
+            dodJson["ids"].push(selecteddod.getAttribute("dod-id"));
             selecteddod.remove();
         }
 
@@ -179,7 +179,7 @@ KB.on('dom.ready', function () {
         KB.http.get(url);
     });
 
-    $(document).on('click', '.dodSelect', function (e) {
+    $(document).on('click', '.dod-select', function (e) {
         e.preventDefault();
         this.classList.toggle("fa-square-o");
         this.classList.toggle("fa-check-square-o");
@@ -187,7 +187,7 @@ KB.on('dom.ready', function () {
         this.closest(".dod").classList.toggle("dod-selected");
     });
 
-    $(document).on('click', '.dodExport', function (e) {
+    $(document).on('click', '.dod-export', function (e) {
         e.preventDefault();
 
         var el = $(this);
@@ -201,7 +201,7 @@ KB.on('dom.ready', function () {
         });
     });
 
-    $(document).on('click', '.dodImport', async function (e) {
+    $(document).on('click', '.dod-import', async function (e) {
         e.preventDefault();
 
         var el = $(this);
@@ -233,7 +233,7 @@ KB.on('dom.ready', function () {
         var url = $(".dod-table").data("save-position-url");
 
         KB.http.postJson(url, {
-            "dod_id": dodid,
+            "dod_id": dod - id,
             "position": position
         });
     }
@@ -259,8 +259,8 @@ KB.on('dom.ready', function () {
                 var dod = ui.item;
                 dod.removeClass("draggable-item-selected");
 
-                if (!dod.hasClass("newdod")) {
-                    dodsavePosition(dod.attr("dodid"), dod.index() + 1);
+                if (!dod.hasClass("dod-new")) {
+                    dodsavePosition(dod.attr("dod-id"), dod.index() + 1);
                 }
             },
             start: function (event, ui) {
@@ -270,7 +270,7 @@ KB.on('dom.ready', function () {
     }
 
     function dodReorder() {
-        let main = $(".dodmain");
+        let main = $(".dod-main");
         let li = main.next("li");
         if (li.length != 0) {
             main.insertAfter(li);

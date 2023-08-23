@@ -82,9 +82,9 @@ class DefinitionOfDoneController extends BaseController
 
     public function trash()
     {
-        $ids = $this->request->getJson();
+        $entries = $this->request->getJson();
 
-        $this->definitionOfDoneModel->delete($ids);
+        $this->definitionOfDoneModel->delete($entries);
 
         $this->response->status(200);
     }
@@ -124,11 +124,11 @@ class DefinitionOfDoneController extends BaseController
             $class = ' dod-separator';
         }
 
-        $html = '<tr class="dod' . $class . '" dodId="' . $dod['id'] . '"' . $style . '>';
+        $html = '<tr class="dod' . $class . '" dod-id="' . $dod['id'] . '"' . $style . '>';
         $html .= '<td class="dod-options">';
         $html .= '<div class="dod-options-box">';
         $html .= '<div class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></div>';
-        $html .= '<div class="fa fa-fw fa-square-o button dodSelect" title="' . t('Select row for deletion') . '"></div>';
+        $html .= '<div class="fa fa-fw fa-square-o button dod-select" title="' . t('Select row for deletion') . '"></div>';
         $html .= '<div class="fa fa-fw fa-trash button dodTrash" taskid="' . $task_id . '" title="' . t('Delete selected rows') . '"></div>';
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', t('Add row'));
         $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit', t('Edit row'));
@@ -169,9 +169,9 @@ class DefinitionOfDoneController extends BaseController
 
         $html = "";
         if (isset($dod['id'])) {
-            $html = '<tr class="editdod" dodId="' . $dod['id'] . '">';
+            $html = '<tr class="editdod" dod-id="' . $dod['id'] . '">';
         } else {
-            $html = '<tr class="newdod">';
+            $html = '<tr class="dod-new">';
         }
         $html .= '<td class="dod-options">';
         $html .= '<div class="dod-options-box">';

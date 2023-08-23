@@ -23,9 +23,9 @@ class DefinitionOfDoneModel extends Base
         return $this->table()->eq('id', $id)->findOne();
     }
 
-    public function getAll($taskId)
+    public function getAll($task_id)
     {
-        return $this->table()->eq('task_id', $taskId)->orderBy("position")->findAll();
+        return $this->table()->eq('task_id', $task_id)->orderBy("position")->findAll();
     }
 
     public function saveMultiple($entries)
@@ -39,13 +39,13 @@ class DefinitionOfDoneModel extends Base
         $this->db->closeTransaction();
     }
 
-    public function copyAll($source, $target)
+    public function copyAll($source_id, $destination_id)
     {
         $this->db->startTransaction();
-        $entries = $this->getAll($source);
+        $entries = $this->getAll($source_id);
 
         foreach ($entries as $entry) {
-            $entry['task_id'] = $target;
+            $entry['task_id'] = $destination_id;
             $this->save($entry, false);
         }
 
@@ -111,11 +111,11 @@ class DefinitionOfDoneModel extends Base
         ));
     }
 
-    public function copy($sourceId, $destinationId)
+    public function copy($source_id, $destination_id)
     {
-        $text = $this->getById($sourceId);
+        $text = $this->getById($source_id);
         if (isset($text)) {
-            $this->save($destinationId, $text);
+            $this->save($destination_id, $text);
         }
     }
 
@@ -133,11 +133,11 @@ class DefinitionOfDoneModel extends Base
 
         $deleted_Entries = array();
 
-        foreach ($entries['ids'] as $dodId) {
-            $Entry = $this->table()->eq('id', $dodId);
+        foreach ($entries['ids'] as $dod_id) {
+            $Entry = $this->table()->eq('id', $dod_id);
 
             // move it to the end of the table
-            $this->move($task_id, $dodId, $size);
+            $this->move($task_id, $dod_id, $size);
             $size--;
 
             // finally remove it.
@@ -149,14 +149,14 @@ class DefinitionOfDoneModel extends Base
 
         $this->db->closeTransaction();
 
-        $project_Id = $this->taskFinderModel->getProjectId($task_id);
+        $project_id = $this->taskFinderModel->getProjectId($task_id);
         $user_id = $this->userSession->getId();
         $this->CreateEvent(array(
             'event_name' => 'DefinitionOfDone.delete',
             'date_creation' => time(),
             'creator_id' => $user_id,
             'task_id' => $task_id,
-            'project_id' => $project_Id,
+            'project_id' => $project_id,
             'data' => json_encode(array('deleted_entries' => $deleted_Entries))
         ));
     }
