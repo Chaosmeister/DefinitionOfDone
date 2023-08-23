@@ -28,9 +28,9 @@ function version_2(PDO $pdo) // remove obsolete user_id
     $pdo->exec("
     ALTER TABLE definition_of_done
     DROP CONSTRAINT definition_of_done_user_id
-    );");
+    ;");
     $pdo->exec("
     ALTER TABLE definition_of_done
     DROP COLUMN user_id
-    );");
+    ;");
 }
