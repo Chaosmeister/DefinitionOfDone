@@ -1,6 +1,6 @@
 # DefinitionOfDone
 
-This plugin adds a checklist to the taskview, similarly to subtasks.  
+This plugin adds a simple checklist to the taskview, similar to subtasks.  
 Each entry consists of a title-, a description- and a toggleable "done"-field.
 
 It also supports a separator to visually structure the list. (use `=====` as description)
