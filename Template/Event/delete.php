@@ -14,7 +14,6 @@
                 <li>
                     <p><strong>Title: </strong><?= $this->text->e($deleted_entries[0]['title']) ?></p>
                     <p><strong>Text: </strong><?= $this->text->markdown($deleted_entries[0]['text']) ?></p>
-                    <p><strong>Assignee: </strong><?= $deleted_entries[0]['user'] ?></p>
                     <p><strong>Finished: </strong><?= ($deleted_entries[0]['status'] != null) ? 'true' : 'false' ?></p>
                 </li>
             <?php endforeach ?>
@@ -33,7 +32,6 @@
         <p class="activity-task-title"><strong>Deleted Entry:</strong></p>
         <p><strong>Title: </strong><?= $this->text->e($deleted_entries[0]['title']) ?></p>
         <p><strong>Text: </strong><?= $this->text->markdown($deleted_entries[0]['text']) ?></p>
-        <p><strong>Assignee: </strong><?= $deleted_entries[0]['user'] ?></p>
         <p><strong>Finished: </strong><?= ($deleted_entries[0]['status'] != null) ? 'true' : 'false' ?></p>
     </div>
 <?php endif ?>

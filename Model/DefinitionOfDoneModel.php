@@ -140,10 +140,6 @@ class DefinitionOfDoneModel extends Base
             $this->move($task_id, $dodId, $size);
             $size--;
 
-            // resolve username
-            $arraysize = array_push($deleted_Entries, $this->getById($dodId));
-            $deleted_Entries[$arraysize - 1]['user'] = $this->userModel->getById($deleted_Entries[$arraysize - 1]['user_id'])['name'];
-
             // finally remove it.
             if (!$Entry->remove()) {
                 $this->db->cancelTransaction();
