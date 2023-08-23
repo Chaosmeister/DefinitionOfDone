@@ -125,8 +125,8 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $html = '<tr class="dod' . $class . '" dodId="' . $dod['id'] . '"' . $style . '>';
-        $html .= '<td>';
-        $html .= '<div class="dod-options">';
+        $html .= '<td class="dod-options">';
+        $html .= '<div class="dod-options-box">';
         $html .= '<div class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></div>';
         $html .= '<div class="fa fa-fw fa-square-o button dodSelect" title="' . t('Select row for deletion') . '"></div>';
         $html .= '<div class="fa fa-fw fa-trash button dodTrash" taskid="' . $task_id . '" title="' . t('Delete selected rows') . '"></div>';
@@ -140,7 +140,7 @@ class DefinitionOfDoneController extends BaseController
             $html .= $dod['title'];
             $html .= '</h1></div></td>';
         } else { // normal line
-            $html .= '<td class="dodStatus">';
+            $html .= '<td class="dod-status">';
             $status = 'square-o';
             if ($dod['status'] != 0) {
                 $status = 'check-' . $status;
@@ -173,8 +173,8 @@ class DefinitionOfDoneController extends BaseController
         } else {
             $html = '<tr class="newdod">';
         }
-        $html .= '<td>';
-        $html .= '<div class="dod-options">';
+        $html .= '<td class="dod-options">';
+        $html .= '<div class="dod-options-box">';
         $html .= '<div class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></div>';
         $html .= '<div class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></div>';
 
@@ -186,7 +186,7 @@ class DefinitionOfDoneController extends BaseController
 
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', 'Add row');
         $html .= '</td>';
-        $html .= '<td class="dodStatus">';
+        $html .= '<td class="dod-status">';
         $html .= '</td>';
         $html .= '<td class="dod-title">';
         $html .= '<textarea class="dodInput newdodTitle">';

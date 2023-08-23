@@ -18,9 +18,16 @@ textarea.dodInput {
     color: var(--color-primary)
 }
 
+.dod-table {
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+
 .dod-title {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
+    min-width: 50%;
 }
 
 .dod-separator-button {
@@ -32,17 +39,16 @@ textarea.dodInput {
     overflow-wrap: anywhere;
 }
 
-.dod-text:not(:empty)  {
+.dod-text:not(:empty) {
     width: 50%;
 }
 
-.dod-table {
-    table-layout: auto;
-    border-collapse: collapse;
-    width: 100%;
+.dod-options, .dod-status {
+    width: 0%;
+    text-align: center;
 }
 
-.dod-options {
+.dod-options-box {
     display: flex;
     align-items: baseline;
 }
