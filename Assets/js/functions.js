@@ -117,6 +117,10 @@ KB.on('dom.ready', function () {
             var tr = el.closest("tr");
             tr.hide();
             $(data).insertBefore(tr);
+
+            tr.prev().find("textarea").each(function (index, item) {
+                resize(item);
+            });
         });
     });
 
@@ -282,6 +286,7 @@ function resizeEvent(event) {
 }
 
 function resize(element) {
+    // expand a textarea to match it's content
     element.style.height = ""; // resets element.scrollHeight to the current necessary height
     element.style.height = element.scrollHeight + "px";
 }
