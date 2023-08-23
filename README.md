@@ -4,6 +4,7 @@ This plugin adds a checklist to the taskview, similarly to subtasks.
 Each entry consists of a title-, a description- and a toggleable "done"-field.
 
 It also supports a separator to visually structure the list. (use `=====` as description)
+The separator is collapsible as well.
 
 supports [MarkdownPlus](https://github.com/creecros/MarkdownPlus)  
 ![image](https://github.com/Chaosmeister/DefinitionOfDone/assets/13346344/625da643-997c-416e-8e79-bdf2b6ce5cd2)
