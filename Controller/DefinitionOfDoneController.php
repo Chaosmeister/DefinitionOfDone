@@ -61,7 +61,7 @@ class DefinitionOfDoneController extends BaseController
             return;
         }
 
-        $template = preg_replace('/[^a-zA-Z0-9_.-]+/', '-', strtolower($template));
+        $template = preg_replace('/[^a-zA-Z0-9_.-]+/', '-', $template);
 
         $values = json_decode(file_get_contents($this->directory . $template), true);
         $values['task_id'] = $task_id;
