@@ -26,7 +26,7 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $enum = '<select class="dod-templates" taskid="' . $task_id . '">';
-        $enum .= '<option disabled selected value>Select a Template</option>';
+        $enum .= '<option value="0" disabled selected value>Select a template</option>';
         $num = 0;
 
         foreach (new DirectoryIterator($this->directory) as $fileInfo) {
