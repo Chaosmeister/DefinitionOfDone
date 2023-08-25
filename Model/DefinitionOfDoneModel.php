@@ -46,6 +46,7 @@ class DefinitionOfDoneModel extends Base
 
         foreach ($entries as $entry) {
             $entry['task_id'] = $destination_id;
+            unset($entry['id']);
             $this->save($entry, false);
         }
 
