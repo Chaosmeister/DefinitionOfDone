@@ -80,7 +80,14 @@ KB.on('dom.ready', function () {
 
         var el = $(this);
         const url = '?controller=DefinitionOfDoneController&action=loadTemplate&plugin=DefinitionOfDone&template=' + e.target.value + '&task_id=' + e.target.getAttribute('taskid');
-        
+
+        if ($('.dod').length != 0) {
+            if (confirm('Overwrite DoD?') == false) {
+                e.target.value = 0;
+                return;
+            }
+        }
+
         KB.http.get(url).success(ReloadTable);
     });
 
