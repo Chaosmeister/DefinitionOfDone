@@ -2,6 +2,8 @@
 
 namespace Kanboard\Plugin\DefinitionOfDone\Controller;
 
+use DirectoryIterator;
+
 use Kanboard\Controller\BaseController;
 
 function isEmpty($variable)
@@ -15,13 +17,61 @@ function isEmpty($variable)
 
 class DefinitionOfDoneController extends BaseController
 {
+    private $directory = PLUGINS_DIR . DIRECTORY_SEPARATOR . 'DefinitionOfDone' . DIRECTORY_SEPARATOR . 'DodTemplates' . DIRECTORY_SEPARATOR;
+
+    public function getTemplates($task_id)
+    {
+        if (!is_dir($this->directory)) {
+            return "";
+        }
+
+        $enum = '<select class="dod-templates" taskid="' . $task_id . '">';
+        $enum .= '<option disabled selected value>Select a Template</option>';
+        $num = 0;
+
+        foreach (new DirectoryIterator($this->directory) as $fileInfo) {
+            if ($fileInfo->isDot() && $fileInfo->isDir()) continue;
+
+            $enum .= '<option value="' . $fileInfo->getFilename() . '">' . $fileInfo->getFilename() . '</option>';
+            $num++;
+        }
+
+        $enum .= '</select>';
+
+        if ($num == 0) {
+            return "";
+        }
+
+        return $enum;
+    }
+
+    public function loadTemplate()
+    {
+        if (!is_dir($this->directory)) {
+            return "";
+        }
+
+        $template = $this->request->getStringParam('template');
+        if ($template == 0) {
+            return;
+        }
+
+        $task_id = $this->request->getIntegerParam('task_id');
+        if ($task_id == 0) {
+            return;
+        }
+
+        $template = preg_replace('/[^a-zA-Z0-9_.-]+/', '-', strtolower($template));
+
+        $values = json_decode(file_get_contents($this->directory . $template), true);
+        $values['task_id'] = $task_id;
+
+        $this->importJson($values);
+    }
+
     public function import()
     {
         $values = $this->request->getJson();
-
-        if (empty($values)) {
-            $this->response->status(422);
-        }
 
         $task_id = $this->request->getIntegerParam('task_id');
         if ($task_id != 0) {
@@ -29,10 +79,20 @@ class DefinitionOfDoneController extends BaseController
             $values['task_id'] = $task_id;
         }
 
-        $this->definitionOfDoneModel->clear($task_id);
+        $this->importJson($values);
+    }
+
+    private function importJson($values)
+    {
+        if (empty($values)) {
+            $this->response->status(422);
+            return;
+        }
+
+        $this->definitionOfDoneModel->clear($values['task_id']);
         $this->store($values);
 
-        $this->response->html($this->rows($task_id));
+        $this->response->html($this->rows($values['task_id']));
     }
 
     public function save()

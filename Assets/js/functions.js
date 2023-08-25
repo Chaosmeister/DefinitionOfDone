@@ -75,6 +75,15 @@ const getJsonUpload = () =>
     })
 
 KB.on('dom.ready', function () {
+    $(document).on('change', '.dod-templates', function (e) {
+        e.preventDefault();
+
+        var el = $(this);
+        const url = '?controller=DefinitionOfDoneController&action=loadTemplate&plugin=DefinitionOfDone&template=' + e.target.value + '&task_id=' + e.target.getAttribute('taskid');
+        
+        KB.http.get(url).success(ReloadTable);
+    });
+
     $(document).on('click', '.dodNew', function (e) {
         e.preventDefault();
 
