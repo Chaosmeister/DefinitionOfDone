@@ -52,7 +52,7 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $template = $this->request->getStringParam('template');
-        if ($template == 0) {
+        if ($template == "") {
             return;
         }
 
