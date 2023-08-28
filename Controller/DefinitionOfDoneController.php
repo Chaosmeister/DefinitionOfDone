@@ -178,11 +178,12 @@ class DefinitionOfDoneController extends BaseController
     private function row($dod, $task_id)
     {
         $separator = $dod['text'] == "=" || $dod['text'] == "====="; // legacy: 5x"="
+        $separatorSmall = $dod['text'] == "==";
+        $hide_description = $dod['text'] == "-";
 
         $style = '';
         $class = '';
-        if ($separator) {
-            $style = ' style="background-color: rgb(0,0,0,0.1);"';
+        if ($separator || $separatorSmall) {
             $class = ' dod-separator';
         }
 
@@ -197,10 +198,18 @@ class DefinitionOfDoneController extends BaseController
         $html .= '</div>';
         $html .= '</td>';
 
-        if ($separator) { // separator
-            $html .= '<td colspan=5 class="button dod-separator-button"><div style="display: flex; align-items: center;"><div class="fa fa-fw fa-compress dod-separator-icon "></div><h1 style="padding-left: 20px">';
+        if ($separator || $separatorSmall) { // separator
+            $html .= '<td colspan=5 class="button dod-separator-button"><div style="display: flex; align-items: center;"><div class="fa fa-fw fa-compress dod-separator-icon "></div>';
+            if (!$separatorSmall)
+            {
+                $html .='<h1 style="padding-left: 20px">';
+            }
             $html .= $dod['title'];
-            $html .= '</h1></div></td>';
+            ;if (!$separatorSmall)
+            {
+                $html .= '</h1>';
+            }
+            $html .= '</div></td>';
         } else { // normal line
             $html .= '<td class="dod-status">';
             $status = 'square-o';
@@ -209,12 +218,19 @@ class DefinitionOfDoneController extends BaseController
             }
             $html .= $this->helper->url->icon($status, '', 'DefinitionOfDoneController', 'toggle', array('dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodStateToggle', t('Toggle state'));
             $html .= '</td>';
-            $html .= '<td class="dod-title">';
+
+            if ($hide_description) {
+                $html .= '<td colspan=2 class="dod-title">';
+            } else {
+                $html .= '<td class="dod-title">';
+            }
             $html .= $this->helper->text->markdown($dod['title']);
             $html .= '</td>';
-            $html .= '<td class="dod-text">';
-            $html .= $this->helper->text->markdown($dod['text']);
-            $html .= '</td>';
+            if (!$hide_description) {
+                $html .= '<td class="dod-text">';
+                $html .= $this->helper->text->markdown($dod['text']);
+                $html .= '</td>';
+            }
             $html .= '</tr>';
         }
         return $html;

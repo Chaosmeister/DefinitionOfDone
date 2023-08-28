@@ -29,6 +29,10 @@ textarea.dodInput {
     overflow-wrap: anywhere;
 }
 
+.dod-separator {
+    background-color: rgb(0,0,0,0.1) !important;
+}
+
 .dod-separator-button {
     width: 100%;
 }
