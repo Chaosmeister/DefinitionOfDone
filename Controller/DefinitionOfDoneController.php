@@ -25,7 +25,13 @@ class DefinitionOfDoneController extends BaseController
             return "";
         }
 
-        $enum = '<select class="dod-templates" taskid="' . $task_id . '">';
+        $enum = '<div style="display:flex; padding-top:5px;align-items: baseline;">';
+
+        if ($task_id == 0) {
+            $enum .= '<label for="form-dod-templates" style="padding-right:5px;">DoDTemplate</label>';
+        }
+
+        $enum .= '<select class="dod-templates" id="form-dod-templates" name="dod-templates" taskid="' . $task_id . '">';
         $enum .= '<option value="0" disabled selected value>Select a template</option>';
         $num = 0;
 
@@ -37,6 +43,7 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $enum .= '</select>';
+        $enum .= '</div>';
 
         if ($num == 0) {
             return "";
@@ -67,6 +74,22 @@ class DefinitionOfDoneController extends BaseController
         $values['task_id'] = $task_id;
 
         $this->importJson($values);
+
+        $this->response->html($this->rows($values['task_id']));
+    }
+
+    public function loadTemplateInternal($template, $task_id)
+    {
+        if (!is_dir($this->directory)) {
+            return "";
+        }
+
+        $template = preg_replace('/[^a-zA-Z0-9_.-]+/', '-', $template);
+
+        $values = json_decode(file_get_contents($this->directory . $template), true);
+        $values['task_id'] = $task_id;
+
+        $this->importJson($values);
     }
 
     public function import()
@@ -80,6 +103,8 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $this->importJson($values);
+        
+        $this->response->html($this->rows($values['task_id']));
     }
 
     private function importJson($values)
@@ -91,8 +116,6 @@ class DefinitionOfDoneController extends BaseController
 
         $this->definitionOfDoneModel->clear($values['task_id']);
         $this->store($values);
-
-        $this->response->html($this->rows($values['task_id']));
     }
 
     public function save()
@@ -199,13 +222,11 @@ class DefinitionOfDoneController extends BaseController
 
         if ($separator || $separatorSmall) { // separator
             $html .= '<td colspan=5 class="button dod-separator-button"><div style="display: flex; align-items: center;"><div class="fa fa-fw fa-compress dod-separator-icon "></div>';
-            if (!$separatorSmall)
-            {
-                $html .='<h1 style="padding-left: 20px">';
+            if (!$separatorSmall) {
+                $html .= '<h1 style="padding-left: 20px">';
             }
-            $html .= $dod['title'];
-            ;if (!$separatorSmall)
-            {
+            $html .= $dod['title'];;
+            if (!$separatorSmall) {
                 $html .= '</h1>';
             }
             $html .= '</div></td>';
