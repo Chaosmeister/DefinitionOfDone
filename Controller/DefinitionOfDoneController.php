@@ -177,9 +177,11 @@ class DefinitionOfDoneController extends BaseController
 
     private function row($dod, $task_id)
     {
+        $separator = $dod['text'] == "=" || $dod['text'] == "====="; // legacy: 5x"="
+
         $style = '';
         $class = '';
-        if ($dod['text'] == "=====") { // separator
+        if ($separator) {
             $style = ' style="background-color: rgb(0,0,0,0.1);"';
             $class = ' dod-separator';
         }
@@ -195,7 +197,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '</div>';
         $html .= '</td>';
 
-        if ($dod['text'] == "=====") { // separator
+        if ($separator) { // separator
             $html .= '<td colspan=5 class="button dod-separator-button"><div style="display: flex; align-items: center;"><div class="fa fa-fw fa-compress dod-separator-icon "></div><h1 style="padding-left: 20px">';
             $html .= $dod['title'];
             $html .= '</h1></div></td>';
