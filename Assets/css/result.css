@@ -27,7 +27,6 @@ textarea.dodInput {
 .dod-title {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
-    min-width: 50%;
 }
 
 .dod-separator-button {
