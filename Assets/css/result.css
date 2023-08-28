@@ -24,13 +24,18 @@ textarea.dodInput {
     width: 100%;
 }
 
+.dod-table>thead {
+    inset-block-start: 0;
+    position: sticky;
+}
+
 .dod-title {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
 .dod-separator {
-    background-color: rgb(0,0,0,0.1) !important;
+    background-color: rgb(0, 0, 0, 0.1) !important;
 }
 
 .dod-separator-button {
@@ -46,7 +51,8 @@ textarea.dodInput {
     width: 50%;
 }
 
-.dod-options, .dod-status {
+.dod-options,
+.dod-status {
     width: 0%;
     text-align: center;
 }
