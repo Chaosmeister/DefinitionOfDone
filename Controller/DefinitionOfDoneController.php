@@ -25,9 +25,10 @@ class DefinitionOfDoneController extends BaseController
             return "";
         }
 
-        $enum = '<div style="display:flex; padding-top:5px;align-items: baseline;">';
+        $enum = '';
 
         if ($task_id == 0) {
+            $enum .= '<div style="display:flex; padding-top:5px;align-items: baseline;">';
             $enum .= '<label for="form-dod-templates" style="padding-right:5px;">DoDTemplate</label>';
         }
 
@@ -43,7 +44,9 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $enum .= '</select>';
-        $enum .= '</div>';
+        if ($task_id == 0) {
+            $enum .= '</div>';
+        }
 
         if ($num == 0) {
             return "";
@@ -103,7 +106,7 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $this->importJson($values);
-        
+
         $this->response->html($this->rows($values['task_id']));
     }
 
