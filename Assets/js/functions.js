@@ -245,11 +245,11 @@ KB.on('dom.ready', function () {
         }
     });
 
-    function dodsavePosition(dodid, position) {
+    function dodsavePosition(dodId, position) {
         var url = $(".dod-table").data("save-position-url");
 
         KB.http.postJson(url, {
-            "dod_id": dod - id,
+            "dod_id": dodId,
             "position": position
         });
     }
