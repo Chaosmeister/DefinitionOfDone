@@ -7,8 +7,6 @@ use Kanboard\Plugin\DefinitionOfDone\Controller\DefinitionOfDoneController;
 
 class Plugin extends Base
 {
-    private $dodtemplate = "";
-
     public function initialize()
     {
         $this->template->setTemplateOverride('event/DefinitionOfDone_create', 'DefinitionOfDone:Event/create');
@@ -30,7 +28,7 @@ class Plugin extends Base
         });
 
         $this->hook->on('model:task:creation:aftersave', function ($task_id) use ($container) {
-            if ($container->dodtemplate == "") {
+            if (!isset($container->dodtemplate) || $container->dodtemplate == "") {
                 return;
             }
             $controller = new DefinitionOfDoneController($container);
