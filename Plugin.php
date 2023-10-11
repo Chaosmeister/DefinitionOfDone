@@ -7,6 +7,8 @@ use Kanboard\Plugin\DefinitionOfDone\Controller\DefinitionOfDoneController;
 
 class Plugin extends Base
 {
+    private $dodtemplate = "";
+
     public function initialize()
     {
         $this->template->setTemplateOverride('event/DefinitionOfDone_create', 'DefinitionOfDone:Event/create');
@@ -18,21 +20,19 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:task:form:first-column', 'DefinitionOfDone:DefinitionOfDone/creation');
 
-        $container = $this->container;
-
-        $this->hook->on('model:task:creation:prepare', function (&$values) use ($container) {
+        $this->hook->on('model:task:creation:prepare', function (&$values) {
             if (isset($values['dod-templates'])) {
-                $container->dodtemplate = $values['dod-templates'];
+                $this->dodtemplate = $values['dod-templates'];
                 unset($values['dod-templates']);
             }
         });
 
-        $this->hook->on('model:task:creation:aftersave', function ($task_id) use ($container) {
-            if (!isset($container->dodtemplate) || $container->dodtemplate == "") {
+        $this->hook->on('model:task:creation:aftersave', function ($task_id) {
+            if ($this->dodtemplate == "") {
                 return;
             }
-            $controller = new DefinitionOfDoneController($container);
-            $controller->loadTemplateInternal($container->dodtemplate, $task_id);
+            $controller = new DefinitionOfDoneController($this->container);
+            $controller->loadTemplateInternal($this->dodtemplate, $task_id);
         });
 
         $this->hook->on('template:layout:js', array('template' => 'plugins/DefinitionOfDone/Assets/js/functions.js'));
