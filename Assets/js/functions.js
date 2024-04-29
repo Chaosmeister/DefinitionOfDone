@@ -1,4 +1,6 @@
 
+var CollapsedRows = [];
+
 function hideSingleNewRow() {
     if ($(".newdodrow").is(":visible")) {
         $(".newdodrow").hide();
@@ -19,7 +21,7 @@ function serializedodtable() {
     var dod = [];
 
     var rows = $(".dod-table").find("tbody").find("tr");
-
+    var CollapsedRow = 0;
     rows.each(function (index) {
         if ($(this).hasClass("editdod")) {
             var row = {};
@@ -34,7 +36,12 @@ function serializedodtable() {
             var row = {};
 
             row["id"] = $(this).attr("dod-id");
-
+            if ($(this).hasClass("dod-separator")) {
+                if ($(this).find(".fa-expand").length !== 0) {
+                    CollapsedRows.push(CollapsedRow);
+                }
+                CollapsedRow++;
+            }
             dod.push(row);
         }
         else if ($(this).hasClass("dod-new")) {
@@ -166,9 +173,23 @@ KB.on('dom.ready', function () {
     });
 
     function ReloadTable(newtable) {
-        var rows = $(".dod-table").find("tbody").find("tr");
-        rows.remove();
-        $(".dod-table").find("tbody").append($(newtable));
+        var table = $(".dod-table").find("tbody");
+        table.find("tr").remove();
+        table.append($(newtable));
+
+        var rows = table.find(".dod-separator");
+        var CollapsedRow = 0;
+        rows.each(function (index) {
+            if (CollapsedRows.includes(CollapsedRow)) {
+                var parent = $(this);
+                var icon = parent.find(".dod-separator-icon");
+                icon.toggleClass("fa-compress");
+                icon.toggleClass("fa-expand");
+                parent.nextUntil(".dod-separator, .newdodrow").hide();
+            }
+            CollapsedRow++;
+        });
+        CollapsedRows = [];
     };
 
     $(document).on('click', '.dodSave', function (e) {
