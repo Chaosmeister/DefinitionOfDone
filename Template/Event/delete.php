@@ -1,3 +1,4 @@
+<?php if (!empty($deleted_entries)) : ?>
 <?php if (count($deleted_entries) > 1) : ?>
     <p class="activity-title">
         <?= e(
@@ -34,4 +35,5 @@
         <p><strong>Text: </strong><?= $this->text->markdown($deleted_entries[0]['text']) ?></p>
         <p><strong>Finished: </strong><?= ($deleted_entries[0]['status'] != null) ? 'true' : 'false' ?></p>
     </div>
+<?php endif ?>
 <?php endif ?>
