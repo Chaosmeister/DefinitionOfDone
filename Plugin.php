@@ -20,6 +20,8 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:task:form:first-column', 'DefinitionOfDone:DefinitionOfDone/creation');
 
+        $this->template->hook->attach('template:task:dropdown:after-send-mail', 'DefinitionOfDone:DefinitionOfDone/checkall');
+
         $this->hook->on('model:task:creation:prepare', function (&$values) {
             if (isset($values['dod-templates'])) {
                 $this->dodtemplate = $values['dod-templates'];
@@ -52,11 +54,11 @@ class Plugin extends Base
     {
         return array(
             'Plugin\DefinitionOfDone\Model' => array(
-                'DefinitionOfDoneModel'
+                'DefinitionOfDoneModel',
             ),
             'Plugin\DefinitionOfDone\Controller' => array(
-                'DefinitionOfDoneController'
-            )
+                'DefinitionOfDoneController',
+            ),
         );
     }
 

@@ -3,7 +3,6 @@
 namespace Kanboard\Plugin\DefinitionOfDone\Controller;
 
 use DirectoryIterator;
-
 use Kanboard\Controller\BaseController;
 
 function isEmpty($variable)
@@ -37,7 +36,9 @@ class DefinitionOfDoneController extends BaseController
         $num = 0;
 
         foreach (new DirectoryIterator($this->directory) as $fileInfo) {
-            if ($fileInfo->isDot() && $fileInfo->isDir()) continue;
+            if ($fileInfo->isDot() && $fileInfo->isDir()) {
+                continue;
+            }
 
             $enum .= '<option value="' . $fileInfo->getFilename() . '">' . $fileInfo->getFilename() . '</option>';
             $num++;
@@ -228,7 +229,7 @@ class DefinitionOfDoneController extends BaseController
             if (!$separatorSmall) {
                 $html .= '<h1 style="padding-left: 20px">';
             }
-            $html .= $dod['title'];;
+            $html .= $dod['title'];
             if (!$separatorSmall) {
                 $html .= '</h1>';
             }
@@ -333,6 +334,23 @@ class DefinitionOfDoneController extends BaseController
         }
 
         $this->definitionOfDoneModel->save($entry, true);
+    }
+
+    public function checkall()
+    {
+        $task_id = $this->request->getIntegerParam('task_id');
+
+        $entries = $this->definitionOfDoneModel->getAll($task_id);
+
+        foreach ($entries as &$entry) {
+            $entry['status'] = 1;
+        }
+
+        $this->definitionOfDoneModel->saveMultiple($entries);
+
+        $task = $this->taskFinderModel->getById($task_id);
+
+        $this->response->redirect($this->helper->url->to('BoardViewController', 'show', array('project_id' => $task['project_id'])), true);
     }
 
     public function export()
