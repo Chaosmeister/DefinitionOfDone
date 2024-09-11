@@ -371,4 +371,10 @@ class DefinitionOfDoneController extends BaseController
             $this->response->json($export);
         }
     }
+
+    public function hover()
+    {
+        $task_id = $this->request->getIntegerParam('task_id');
+        $this->response->html($this->template->render('DefinitionOfDone:DefinitionOfDone/show', array('task' => array('id' => $task_id))));
+    }
 }

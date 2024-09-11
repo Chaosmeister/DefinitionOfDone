@@ -22,6 +22,9 @@ class Plugin extends Base
 
         $this->template->hook->attach('template:task:dropdown:after-send-mail', 'DefinitionOfDone:DefinitionOfDone/checkall');
 
+        $this->template->hook->attach('template:board:task:icons', 'DefinitionOfDone:DefinitionOfDone/hover');
+        
+
         $this->hook->on('model:task:creation:prepare', function (&$values) {
             if (isset($values['dod-templates'])) {
                 $this->dodtemplate = $values['dod-templates'];

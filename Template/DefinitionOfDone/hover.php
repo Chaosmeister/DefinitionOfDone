@@ -1,0 +1,1 @@
+<?= $this->app->tooltipLink('<i class="fa fa-check"></i>', $this->url->href('DefinitionOfDoneController', 'hover', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'))) ?>
