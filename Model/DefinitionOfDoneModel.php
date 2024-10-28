@@ -190,7 +190,7 @@ class DefinitionOfDoneModel extends Base
     {
         $result = array();
 
-        $tasks = $this->db->table("tasks")->eq('column_id', 8)->asc('position')->findAllByColumn('id');
+        $tasks = $this->db->table("tasks")->eq('column_id', 47)->asc('position')->findAllByColumn('id');
 
         $counter = 0;
         foreach ($tasks as $task) {
