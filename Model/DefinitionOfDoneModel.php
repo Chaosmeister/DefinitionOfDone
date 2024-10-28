@@ -188,19 +188,24 @@ class DefinitionOfDoneModel extends Base
 
     public function collectReleaseNotes()
     {
-        $json = array();
+        $result = array();
 
-        $tasks = $this->db->table("tasks")->eq('column_id', 47)->asc('position')->findAllByColumn('id');
+        $tasks = $this->db->table("tasks")->eq('column_id', 8)->asc('position')->findAllByColumn('id');
 
+        $counter = 0;
         foreach ($tasks as $task) {
             $dod = $this->getAll($task);
+            array_push($result, array('task' => $task, 'text' => 'NA'));
+
             foreach ($dod as $entry) {
                 if ($entry['title'] == 'Release Note verfassen (Englisch)') {
-                    array_push($json, array('task' => $task, 'text' => $entry['text']));
+                    $result[$counter]['text'] = $entry['text'];
+                    break;
                 }
             }
+            $counter++;
         }
 
-        return array_values($json);
+        return array_values($result);
     }
 }
