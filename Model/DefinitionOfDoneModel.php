@@ -73,8 +73,8 @@ class DefinitionOfDoneModel extends Base
                         'project_id' => $project_id,
                         'data' => json_encode(array(
                             'title' => $entry['title'],
-                            'status' => $entry['status']
-                        ))
+                            'status' => $entry['status'],
+                        )),
                     ));
                 } else if (
                     isset($entry['title']) &&
@@ -88,8 +88,8 @@ class DefinitionOfDoneModel extends Base
                         'project_id' => $project_id,
                         'data' => json_encode(array(
                             'title' => $entry['title'],
-                            'text' => $entry['text']
-                        ))
+                            'text' => $entry['text'],
+                        )),
                     ));
                 }
                 return;
@@ -107,8 +107,8 @@ class DefinitionOfDoneModel extends Base
             'project_id' => $project_id,
             'data' => json_encode(array(
                 'title' => $entry['title'],
-                'text' => $entry['text']
-            ))
+                'text' => $entry['text'],
+            )),
         ));
     }
 
@@ -158,7 +158,7 @@ class DefinitionOfDoneModel extends Base
             'creator_id' => $user_id,
             'task_id' => $task_id,
             'project_id' => $project_id,
-            'data' => json_encode(array('deleted_entries' => $deleted_Entries))
+            'data' => json_encode(array('deleted_entries' => $deleted_Entries)),
         ));
     }
 
@@ -184,5 +184,23 @@ class DefinitionOfDoneModel extends Base
         $results[] = $this->table()->eq('id', $dod_id)->update(array('position' => $position));
 
         return !in_array(false, $results, true);
+    }
+
+    public function collectReleaseNotes()
+    {
+        $json = array();
+
+        $tasks = $this->db->table("tasks")->eq('column_id', 47)->asc('position')->findAllByColumn('id');
+
+        foreach ($tasks as $task) {
+            $dod = $this->getAll($task);
+            foreach ($dod as $entry) {
+                if ($entry['title'] == 'Release Note verfassen (Englisch)') {
+                    array_push($json, array('task' => $task, 'text' => $entry['text']));
+                }
+            }
+        }
+
+        return array_values($json);
     }
 }

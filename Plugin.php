@@ -46,6 +46,10 @@ class Plugin extends Base
         $this->hook->on('model:task:project_duplication:aftersave', function ($hook_values) {
             $this->definitionOfDoneModel->copyAll($hook_values['source_task_id'], $hook_values['destination_task_id']);
         });
+
+        $this->api->getProcedureHandler()->withCallback('GetReleaseNotes', function() {
+            return $this->definitionOfDoneModel->collectReleaseNotes();
+        });        
     }
 
     public function getPluginName()
