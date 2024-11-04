@@ -13,9 +13,9 @@
         <ul>
             <?php foreach ($deleted_entries as $entry) : ?>
                 <li>
-                    <p><strong>Title: </strong><?= $this->text->e($deleted_entries[0]['title']) ?></p>
-                    <p><strong>Text: </strong><?= $this->text->markdown($deleted_entries[0]['text']) ?></p>
-                    <p><strong>Finished: </strong><?= ($deleted_entries[0]['status'] != null) ? 'true' : 'false' ?></p>
+                    <p><strong>Title: </strong><?= $this->text->e($entry['title']) ?></p>
+                    <p><strong>Text: </strong><?= $this->text->markdown($entry['text']) ?></p>
+                    <p><strong>Finished: </strong><?= ($entry['status'] != null) ? 'true' : 'false' ?></p>
                 </li>
             <?php endforeach ?>
         </ul>

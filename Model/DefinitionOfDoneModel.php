@@ -135,17 +135,21 @@ class DefinitionOfDoneModel extends Base
         $deleted_Entries = array();
 
         foreach ($entries['ids'] as $dod_id) {
-            $Entry = $this->table()->eq('id', $dod_id);
+            $Entry = $this->getById($dod_id);
+
+            $DBEntry = $this->table()->eq('id', $dod_id);
 
             // move it to the end of the table
             $this->move($task_id, $dod_id, $size);
             $size--;
 
             // finally remove it.
-            if (!$Entry->remove()) {
+            if (!$DBEntry->remove()) {
                 $this->db->cancelTransaction();
                 return;
             }
+
+            array_push($deleted_Entries, $Entry);
         }
 
         $this->db->closeTransaction();
