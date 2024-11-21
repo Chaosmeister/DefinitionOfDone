@@ -251,7 +251,7 @@ class DefinitionOfDoneController extends BaseController
             $html .= $this->helper->text->markdown($dod['title']);
             $html .= '</td>';
             if (!$hide_description) {
-                $html .= '<td class="dod-text">';
+                $html .= '<td class="dod-text markdown">';
                 $html .= $this->helper->text->markdown($dod['text']);
                 $html .= '</td>';
             }
