@@ -30,7 +30,6 @@ textarea.dodInput {
 }
 
 .dod-title {
-    white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
@@ -43,7 +42,6 @@ textarea.dodInput {
 }
 
 .dod-text {
-    white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
 
