@@ -7,7 +7,9 @@ return [
     'Edit row' => 'Zeile bearbeiten',
     'Add row' => 'Zeile anfügen',
     'Toggle state' => 'Erledigungsstatus umschalten',
-    // '' => '',
-    // '' => '',
+    'Close' => 'Schließen',
+    'Import' => 'Import',
+    'Export' => 'Export',
+    'Save Table' => 'Speichern',
     // '' => '',
 ];
