@@ -1,7 +1,7 @@
 <details class="accordion-section dod-main" open>
     <summary class="accordion-title"><?= t('Definition Of Done') ?>
-        <?= $this->helper->url->icon('upload', '', 'DefinitionOfDoneController', 'import', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dod-import') ?>
-        <?= $this->helper->url->icon('download', '', 'DefinitionOfDoneController', 'export', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dod-export') ?>
+        <?= $this->helper->url->icon('upload', '', 'DefinitionOfDoneController', 'import', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dod-import', t('Import') ?>
+        <?= $this->helper->url->icon('download', '', 'DefinitionOfDoneController', 'export', array('task_id' => $task['id'], 'plugin' => 'DefinitionOfDone'), false, 'dod-export', t('Export')) ?>
         <?= $this->app->definitionOfDoneController->getTemplates($task['id']) ?>
     </summary>
     <div class="accordion-content">
