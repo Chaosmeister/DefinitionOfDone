@@ -7,7 +7,9 @@ return [
     'Edit row' => 'Editar fila',
     'Add row' => 'Añadir línea',
     'Toggle state' => 'Estado de finalización de conmutación',
-    // '' => '',
-    // '' => '',
+    'Close' => 'Cerrar',
+    'Import' => 'Importar plantilla',
+    'Export' => 'Exportar plantilla',
+    'Save Table' => 'Guardar tabla',
     // '' => '',
 ];
