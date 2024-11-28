@@ -278,7 +278,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<td class="dod-options">';
         $html .= '<div class="dod-options-box">';
         $html .= '<div class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" aria-label="' . t('Change position') . '"></div>';
-        $html .= '<div class="fa fa-fw fa-save button dodSave" taskid="' . $task_id . '"></div>';
+        $html .= '<div class="fa fa-fw fa-save button dodSave" title="' . t('Save table') . '" taskid="' . $task_id . '"></div>';
 
         if (isset($dod)) {
             $html .= '<div class="fa fa-fw fa-times button editdodTrash" title="' . t('Close row') . '"></div>';
