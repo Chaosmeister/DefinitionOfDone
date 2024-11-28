@@ -7,7 +7,9 @@ return [
     'Edit row' => 'Editer la ligne',
     'Add row' => 'Ajouter une ligne',
     'Toggle state' => 'Commuter l\'état d\'achèvement',
-    // '' => '',
-    // '' => '',
+    'Close' => 'Fermer',
+    'Import' => 'Importer',
+    'Export' => 'Exporter',
+    'Save Table' => 'Enregistrer le tableau',
     // '' => '',
 ];
