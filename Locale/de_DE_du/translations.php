@@ -7,7 +7,7 @@ return [
     'Edit row' => 'Zeile bearbeiten',
     'Add row' => 'Zeile anfügen',
     'Toggle state' => 'Erledigungsstatus umschalten',
-    'Close' => 'Schließen',
+    'Close row' => 'Zeile schließen',
     'Import' => 'Import',
     'Export' => 'Export',
     'Save Table' => 'Speichern',
