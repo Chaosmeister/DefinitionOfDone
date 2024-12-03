@@ -3,6 +3,7 @@
 namespace Kanboard\Plugin\DefinitionOfDone;
 
 use Kanboard\Core\Plugin\Base;
+use Kanboard\Core\Translator;
 use Kanboard\Plugin\DefinitionOfDone\Controller\DefinitionOfDoneController;
 
 class Plugin extends Base
@@ -23,7 +24,7 @@ class Plugin extends Base
         $this->template->hook->attach('template:task:dropdown:after-send-mail', 'DefinitionOfDone:DefinitionOfDone/checkall');
 
         $this->template->hook->attach('template:board:task:icons', 'DefinitionOfDone:DefinitionOfDone/hover');
-        
+
 
         $this->hook->on('model:task:creation:prepare', function (&$values) {
             if (isset($values['dod-templates'])) {
@@ -55,7 +56,10 @@ class Plugin extends Base
             return $this->definitionOfDoneModel->collectReleaseNotes();
         });
     }
-
+    public function onStartup()
+    {
+        Translator::load($this->languageModel->getCurrentLanguage(), __DIR__.'/Locale');
+    }
     public function getPluginName()
     {
         return 'DefinitionOfDone';
@@ -85,7 +89,7 @@ class Plugin extends Base
 
     public function getPluginVersion()
     {
-        return '1.3.0';
+        return '1.3.1';
     }
 
     public function getPluginHomepage()
