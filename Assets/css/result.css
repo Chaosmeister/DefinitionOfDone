@@ -27,6 +27,8 @@ textarea.dodInput {
 .dod-table>thead {
     inset-block-start: 0;
     position: sticky;
+    top: -1px;
+    z-index: 1;
 }
 
 .dod-title {
@@ -69,3 +71,4 @@ textarea.dodInput {
 td.markdown p:first-child {
     margin-top: 10px;
 }
+
