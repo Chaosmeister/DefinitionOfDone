@@ -265,6 +265,18 @@ KB.on('dom.ready', function () {
             parent.nextUntil(".dod-separator, .newdodrow").show();
         }
     });
+    
+    $(document).on('click', '.dodLink', function (e) {
+        e.preventDefault();
+
+        var el = $(this);
+        var link = window.location.search + "&dodid=" + evt.target.getAttribute('dod-id');
+        navigator.clipboard.writeText(link).then(() => {
+          /* clipboard successfully set */
+        }, () => {
+          /* clipboard write failed */
+        });
+    });
 
     function dodsavePosition(dodId, position) {
         var url = $(".dod-table").data("save-position-url");
@@ -335,3 +347,4 @@ function resize(element) {
     element.style.height = element.scrollHeight + "px";
 
 }
+
