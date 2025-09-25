@@ -269,8 +269,9 @@ KB.on('dom.ready', function () {
     $(document).on('click', '.dodLink', function (e) {
         e.preventDefault();
 
-        var el = $(this);
-        var link = window.location.search + "&dodid=" + evt.target.getAttribute('dod-id');
+        var link = window.location.href;
+        link = link.replace(/&dodid=\d+/, "")
+        link += "&dodid=" + e.target.getAttribute('dodid');
         navigator.clipboard.writeText(link).then(() => {
           /* clipboard successfully set */
         }, () => {
@@ -285,7 +286,7 @@ KB.on('dom.ready', function () {
             "dod_id": dodId,
             "position": position
         });
-    }
+    };
 
     function dodbootstrap() {
         $(".dod-draggable-row-handle").mouseenter(function () {
@@ -316,7 +317,7 @@ KB.on('dom.ready', function () {
                 ui.item.addClass("draggable-item-selected");
             }
         });
-    }
+    };
 
     function dodReorder() {
         let main = $(".dod-main");
@@ -324,17 +325,30 @@ KB.on('dom.ready', function () {
         if (li.length != 0) {
             main.insertAfter(li);
         }
-    }
+    };
 
+    function dodScroll() {
+        var dodId = new URLSearchParams(window.location.search).get('dodid');
+        if (dodId){
+            var entry = document.querySelector('[dod-id="'+ dodId +'"]');
+            if (entry)
+                entry.classList.add('dod-highlight');
+                setTimeout(() => {
+                    entry.scrollIntoView();
+                    setTimeout(() => {
+                        entry.classList.add('dod-highlight-off');
+                        setTimeout(() => {
+                        entry.classList.remove('dod-highlight');
+                        entry.classList.remove('dod-highlight-off');
+                        }, 3000);
+                    }, 500);
+                }, 500); 
+        };
+    };
+    
     dodbootstrap();
     dodReorder();
-
-    var dodId = new URLSearchParams(window.location.search).get('dod_id');
-    if (dodId){
-        var entry = document.querySelector('[dod-id="'+ dodId +'"]');
-        if (entry)
-            entry.scrollIntoView();
-    }
+    dodScroll();
 });
 
 function resizeEvent(event) {
