@@ -346,13 +346,6 @@ KB.on('dom.ready', function () {
                 entry.classList.add('dod-highlight');
                 setTimeout(() => {
                     scrollToTargetAdjusted(entry);
-                    setTimeout(() => {
-                        entry.classList.add('dod-highlight-off');
-                        setTimeout(() => {
-                        entry.classList.remove('dod-highlight');
-                        entry.classList.remove('dod-highlight-off');
-                        }, 3000);
-                    }, 500);
                 }, 500); 
         };
     };
