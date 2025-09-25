@@ -221,6 +221,7 @@ class DefinitionOfDoneController extends BaseController
         $html .= '<div class="fa fa-fw fa-trash button dodTrash" taskid="' . $task_id . '" title="' . t('Delete selected rows') . '"></div>';
         $html .= $this->helper->url->icon('plus', '', 'DefinitionOfDoneController', 'getnewrow', array('task_id' => $task_id, 'plugin' => 'DefinitionOfDone'), false, 'dodNew', t('Add row'));
         $html .= $this->helper->url->icon('edit', '', 'DefinitionOfDoneController', 'edit', array('task_id' => $task_id, 'dod_id' => $dod['id'], 'plugin' => 'DefinitionOfDone'), false, 'dodEdit', t('Edit row'));
+        $html .= '<div class="fa fa-fw fa-link button dodLink" dodid="' . $dod['id'] . '"></div>';
         $html .= '</div>';
         $html .= '</td>';
 
@@ -378,3 +379,4 @@ class DefinitionOfDoneController extends BaseController
         $this->response->html($this->template->render('DefinitionOfDone:DefinitionOfDone/show', array('task' => array('id' => $task_id))));
     }
 }
+
