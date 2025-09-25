@@ -316,6 +316,13 @@ KB.on('dom.ready', function () {
 
     dodbootstrap();
     dodReorder();
+
+    var dodId = new URLSearchParams(window.location.search).get('dod_id');
+    if (dodId){
+        var entry = document.querySelector('[dod-id="'+ dodId +'"]');
+        if (entry)
+            entry.scrollIntoView();
+    }
 });
 
 function resizeEvent(event) {
@@ -326,4 +333,5 @@ function resize(element) {
     // expand a textarea to match it's content
     element.style.height = ""; // resets element.scrollHeight to the current necessary height
     element.style.height = element.scrollHeight + "px";
+
 }
