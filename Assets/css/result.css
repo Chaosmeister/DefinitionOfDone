@@ -73,10 +73,10 @@ td.markdown p:first-child {
 }
 
 .dod-highlight {
-    background-color: greenyellow;
+    background-color: greenyellow !important;
 }
 
 .dod-highlight-off {
-    background-color: inherit;
+    background-color: inherit !important;
     transition: background-color 3s;
 }

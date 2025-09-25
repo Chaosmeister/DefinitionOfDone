@@ -327,6 +327,17 @@ KB.on('dom.ready', function () {
         }
     };
 
+    function scrollToTargetAdjusted(element){
+        var headerOffset = 100;
+        var elementPosition = element.getBoundingClientRect().top;
+        var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    
+        window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+        });
+    }
+
     function dodScroll() {
         var dodId = new URLSearchParams(window.location.search).get('dodid');
         if (dodId){
@@ -334,7 +345,7 @@ KB.on('dom.ready', function () {
             if (entry)
                 entry.classList.add('dod-highlight');
                 setTimeout(() => {
-                    entry.scrollIntoView();
+                    scrollToTargetAdjusted(entry);
                     setTimeout(() => {
                         entry.classList.add('dod-highlight-off');
                         setTimeout(() => {
