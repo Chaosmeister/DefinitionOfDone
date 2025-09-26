@@ -279,6 +279,11 @@ KB.on('dom.ready', function () {
         });
     });
 
+    $(document).on('click', '.dod-first-empty', function (e) {
+        e.preventDefault();
+        scrollToTargetAdjusted($("i.fa-square-o")[0]);
+    });
+
     function dodsavePosition(dodId, position) {
         var url = $(".dod-table").data("save-position-url");
 
