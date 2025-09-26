@@ -281,7 +281,10 @@ KB.on('dom.ready', function () {
 
     $(document).on('click', '.dod-first-empty', function (e) {
         e.preventDefault();
-        scrollToTargetAdjusted($("i.fa-square-o")[0]);
+        var Element = $("i.fa-square-o").parent().parent().parent()[0];
+        if (Element) {
+            scrollToTargetAdjusted(Element);
+        }
     });
 
     function dodsavePosition(dodId, position) {
