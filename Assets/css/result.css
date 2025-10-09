@@ -35,10 +35,6 @@ textarea.dodInput {
     overflow-wrap: anywhere;
 }
 
-.dod-title>div>pre {
-    max-width: 50%;
-}
-
 .dod-separator {
     background-color: rgb(0, 0, 0, 0.1) !important;
 }
@@ -79,6 +75,7 @@ td.markdown p:first-child {
 .dod-highlight {
     border: 2px solid green;
 }
+
 
 
 
