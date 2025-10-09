@@ -65,7 +65,7 @@ textarea.dodInput {
 .dod>td {
     padding-top: 0.1em;
     padding-bottom: 0.1em;
-    vertical-align: middle;
+    vertical-align: baseline;
 }
 
 td.markdown p:first-child {
@@ -75,4 +75,5 @@ td.markdown p:first-child {
 .dod-highlight {
     border: 2px solid green;
 }
+
 
