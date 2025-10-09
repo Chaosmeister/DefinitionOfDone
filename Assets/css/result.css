@@ -35,7 +35,7 @@ textarea.dodInput {
     overflow-wrap: anywhere;
 }
 
-.dod-title>pre {
+.dod-title>div>pre {
     max-width: 50%;
 }
 
