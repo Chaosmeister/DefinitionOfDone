@@ -76,6 +76,13 @@ td.markdown p:first-child {
     border: 2px solid green;
 }
 
+/* Completed entries: strikethrough title and description */
+.dod-completed .dod-title,
+.dod-completed .dod-text {
+    text-decoration: line-through;
+    color: var(--color-muted, #888);
+}
+
 
 
 
