@@ -213,6 +213,12 @@ KB.on('dom.ready', function () {
         icon.toggleClass("fa-square-o");
         icon.toggleClass("fa-check-square-o");
 
+        // Toggle completed class on the parent row for immediate visual feedback
+        var row = el.closest('.dod');
+        if (row.length) {
+            row.toggleClass('dod-completed');
+        }
+
         KB.http.get(url);
     });
 
