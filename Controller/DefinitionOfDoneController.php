@@ -213,7 +213,12 @@ class DefinitionOfDoneController extends BaseController
             $class = ' dod-separator';
         }
 
-        $html = '<tr class="dod' . $class . '" dod-id="' . $dod['id'] . '">';
+        $completedClass = '';
+        if (!$separator && isset($dod['status']) && $dod['status'] != 0) {
+            $completedClass = ' dod-completed';
+        }
+
+        $html = '<tr class="dod' . $class . $completedClass . '" dod-id="' . $dod['id'] . '">';
         $html .= '<td class="dod-options">';
         $html .= '<div class="dod-options-box">';
         $html .= '<div class="fa fa-arrows-alt dod-draggable-row-handle" title="' . t('Change position') . '" role="button" title="' . t('Change position') . '"></div>';
