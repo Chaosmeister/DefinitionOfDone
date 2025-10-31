@@ -220,8 +220,26 @@ KB.on('dom.ready', function () {
         e.preventDefault();
         this.classList.toggle("fa-square-o");
         this.classList.toggle("fa-check-square-o");
+    });
 
-        this.closest(".dod").classList.toggle("dod-selected");
+    $(document).on('click', '.dod-select-children', function (e) {
+        e.preventDefault();
+
+        let entry = this.closest(".dod")
+        entry.classList.toggle("dod-selected");
+
+        if (entry.classList.contains("dod-separator")) {
+            let active = entry.classList.contains("dod-selected");
+
+            let nextSeparator = $(entry).nextAll(".dod-separator,.newdodrow")
+
+            if (active) {
+                $(entry).nextUntil(nextSeparator).addClass("dod-selected").find(".dod-select").removeClass("fa-square-o").addClass("fa-check-square-o");
+            }
+            else {
+                $(entry).nextUntil(nextSeparator).removeClass("dod-selected").find(".dod-select").removeClass("fa-check-square-o").addClass("fa-square-o");
+            }
+        }
     });
 
     $(document).on('click', '.dod-export', function (e) {
@@ -265,7 +283,7 @@ KB.on('dom.ready', function () {
             parent.nextUntil(".dod-separator, .newdodrow").show();
         }
     });
-    
+
     $(document).on('click', '.dodLink', function (e) {
         e.preventDefault();
 
@@ -273,9 +291,9 @@ KB.on('dom.ready', function () {
         link = link.replace(/&dodid=\d+/, "")
         link += "&dodid=" + e.target.getAttribute('dodid');
         navigator.clipboard.writeText(link).then(() => {
-          /* clipboard successfully set */
+            /* clipboard successfully set */
         }, () => {
-          /* clipboard write failed */
+            /* clipboard write failed */
         });
     });
 
@@ -335,11 +353,11 @@ KB.on('dom.ready', function () {
         }
     };
 
-    function scrollToTargetAdjusted(element){
+    function scrollToTargetAdjusted(element) {
         var headerOffset = 100;
         var elementPosition = element.getBoundingClientRect().top;
         var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-    
+
         window.scrollTo({
             top: offsetPosition,
             behavior: "smooth"
@@ -348,16 +366,16 @@ KB.on('dom.ready', function () {
 
     function dodScroll() {
         var dodId = new URLSearchParams(window.location.search).get('dodid');
-        if (dodId){
-            var entry = document.querySelector('[dod-id="'+ dodId +'"]');
+        if (dodId) {
+            var entry = document.querySelector('[dod-id="' + dodId + '"]');
             if (entry)
                 entry.classList.add('dod-highlight');
-                setTimeout(() => {
-                    scrollToTargetAdjusted(entry);
-                }, 500); 
+            setTimeout(() => {
+                scrollToTargetAdjusted(entry);
+            }, 500);
         };
     };
-    
+
     dodbootstrap();
     dodReorder();
     dodScroll();
