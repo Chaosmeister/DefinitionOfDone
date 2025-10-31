@@ -220,6 +220,8 @@ KB.on('dom.ready', function () {
         e.preventDefault();
         this.classList.toggle("fa-square-o");
         this.classList.toggle("fa-check-square-o");
+        
+        this.closest(".dod").classList.toggle("dod-selected");
     });
 
     $(document).on('click', '.dod-select-children', function (e) {
