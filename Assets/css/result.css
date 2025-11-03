@@ -76,6 +76,7 @@ td.markdown p:first-child {
     border: 2px solid green;
 }
 
-
-
-
+tr.dod.dod-selected {
+    border: solid;
+    border-color: darkred;
+}
