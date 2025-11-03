@@ -228,7 +228,6 @@ KB.on('dom.ready', function () {
         e.preventDefault();
 
         let entry = this.closest(".dod")
-        entry.classList.toggle("dod-selected");
 
         if (entry.classList.contains("dod-separator")) {
             let active = entry.classList.contains("dod-selected");
