@@ -28,29 +28,43 @@ class DefinitionOfDoneController extends BaseController
 
         if ($task_id == 0) {
             $enum .= '<div style="display:flex; padding-top:5px;align-items: baseline;">';
-            $enum .= '<label for="form-dod-templates" style="padding-right:5px;">DoDTemplate</label>';
+            $enum .= '<label for="form-dod-templates" style="padding-right:5px;">DoD template</label>';
         }
 
         $enum .= '<select class="dod-templates" id="form-dod-templates" name="dod-templates" taskid="' . $task_id . '">';
-        $enum .= '<option value="0" disabled selected value>Select a template</option>';
-        $num = 0;
+
+        $templatesAvailable = false;
+        $hasDefault = false;
 
         foreach (new DirectoryIterator($this->directory) as $fileInfo) {
-            if ($fileInfo->isDot() && $fileInfo->isDir()) {
+            if ($fileInfo->isDot() || $fileInfo->isDir()) {
                 continue;
             }
 
-            $enum .= '<option value="' . $fileInfo->getFilename() . '">' . $fileInfo->getFilename() . '</option>';
-            $num++;
+            $enum .= '<option value="' . $fileInfo->getFilename() . '"';
+
+            if ($fileInfo->getFilename() == "Default.json") {
+                if ($task_id == 0) {
+                    $enum .= ' selected';
+                    $hasDefault = true;
+                }
+            }
+            $enum .= '>' . $fileInfo->getBasename('.json') . '</option>';
+
+            $templatesAvailable = true;
+        }
+
+        if (!$templatesAvailable) {
+            return "";
+        }
+
+        if (!$hasDefault) {
+            $enum .= '<option selected disabled hidden>Select a template</option>';
         }
 
         $enum .= '</select>';
         if ($task_id == 0) {
             $enum .= '</div>';
-        }
-
-        if ($num == 0) {
-            return "";
         }
 
         return $enum;
