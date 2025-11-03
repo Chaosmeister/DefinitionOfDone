@@ -228,9 +228,10 @@ KB.on('dom.ready', function () {
         e.preventDefault();
 
         let entry = this.closest(".dod")
+        entry.classList.toggle("dod-selected-children");
 
         if (entry.classList.contains("dod-separator")) {
-            let active = entry.classList.contains("dod-selected");
+            let active = entry.classList.contains("dod-selected-children");
 
             let nextSeparator = $(entry).nextAll(".dod-separator,.newdodrow")
 
